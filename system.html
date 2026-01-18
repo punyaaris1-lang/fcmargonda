@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FC MARGONDA - FINAL SYSTEM</title>
+    <title>FC MARGONDA - GPS LOCKED</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
@@ -14,14 +14,21 @@
     
     <style>
         :root { 
-            --bg: #050505; --gold: #FFD700; --red: #FF003C; --cyan: #00F0FF; --green: #39FF14; --neon-purple: #D000FF;
+            --bg: #050505; 
+            --primary: #0088FF; 
+            --primary-dark: #004488; 
+            --primary-light: #88CCFF;
+            --red: #FF003C; 
+            --cyan: #00F0FF; 
+            --green: #39FF14; 
+            --neon-purple: #D000FF;
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
         
         body { 
             font-family: 'Rajdhani', sans-serif; background: #000;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(0, 136, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 136, 255, 0.03) 1px, transparent 1px);
             background-size: 20px 20px; 
             color: #ddd; margin: 0; padding: 15px 20px 120px 20px; 
             min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;
@@ -29,23 +36,25 @@
 
         /* --- CUSTOM MODAL --- */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-box { width: 90%; max-width: 350px; background: #111; border: 1px solid var(--gold); border-radius: 0; padding: 25px; text-align: center; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); transform: scale(0.9); transition: transform 0.2s; }
+        .modal-box { width: 90%; max-width: 350px; background: #111; border: 1px solid var(--primary); border-radius: 0; padding: 25px; text-align: center; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); box-shadow: 0 0 20px rgba(0, 136, 255, 0.2); transform: scale(0.9); transition: transform 0.2s; }
         .modal-overlay.active .modal-box { transform: scale(1); }
-        .modal-title { font-family: 'Black Ops One'; color: var(--gold); font-size: 22px; margin-bottom: 10px; }
+        .modal-title { font-family: 'Black Ops One'; color: var(--primary); font-size: 22px; margin-bottom: 10px; }
         .modal-msg { font-family: 'Rajdhani'; color: #fff; font-size: 16px; margin-bottom: 20px; }
         .modal-btns { display: flex; gap: 10px; justify-content: center; }
         .btn-modal { flex: 1; padding: 10px; font-family: 'Teko'; font-size: 18px; border: none; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px); }
-        .btn-yes { background: var(--gold); color: #000; font-weight: bold; }
+        .btn-yes { background: var(--primary); color: #fff; font-weight: bold; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
         .btn-no { background: #333; color: #fff; border: 1px solid #555; }
 
         /* --- HEADER --- */
-        .header { text-align: center; margin-bottom: 25px; margin-top: 10px; }
-        .main-title { font-family: 'Black Ops One'; font-size: 32px; line-height: 1; color: #eee; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-        .sub-title { font-size: 11px; color: var(--gold); letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin-top: 5px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
+        /* Tambahkan cursor pointer agar user tau bisa di-klik */
+        .header { text-align: center; margin-bottom: 25px; margin-top: 10px; cursor: pointer; user-select: none; }
+        .main-title { font-family: 'Black Ops One'; font-size: 32px; line-height: 1; color: #eee; text-shadow: 0 2px 10px rgba(0,0,0,0.8); transition: 0.3s; }
+        .main-title:active { transform: scale(0.95); color: var(--primary); }
+        .sub-title { font-size: 11px; color: var(--primary); letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin-top: 5px; text-shadow: 0 0 10px rgba(0, 136, 255, 0.4); }
 
         /* --- QUEUE BAR --- */
         .queue-bar-wrapper { width: 100%; margin-bottom: 25px; cursor: pointer; }
-        .queue-bar { background: linear-gradient(180deg, #1a1a1a, #0d0d0d); clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; }
+        .queue-bar { background: linear-gradient(180deg, #1a1a1a, #0d0d0d); clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; border-left: 2px solid var(--primary); }
         .queue-bar-inner { position: absolute; inset: 1px; background: linear-gradient(180deg, #151515, #0a0a0a); clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); z-index: -1; }
         .qb-left { display: flex; flex-direction: column; }
         .qb-lbl { font-size: 9px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
@@ -57,21 +66,21 @@
         /* --- ARMOR CARD --- */
         .armor-card { width: 100%; min-height: 100px; position: relative; background: #000; margin-bottom: 5px; transition: all 0.3s; clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px); }
         .armor-border { position: absolute; inset: 0; background: #333; z-index: 0; }
-        .armor-card.active .armor-border { background: #555; box-shadow: 0 0 15px rgba(255,255,255,0.05); }
+        .armor-card.active .armor-border { background: #555; box-shadow: 0 0 15px rgba(0, 136, 255, 0.1); }
         .armor-inner { position: absolute; inset: 1px; background: linear-gradient(90deg, #121212, #080808); clip-path: polygon(19px 0, 100% 0, 100% calc(100% - 19px), calc(100% - 19px) 100%, 0 100%, 0 19px); display: flex; align-items: center; overflow: hidden; }
         .armor-num { width: 55px; height: 100%; min-height: 100px; display: flex; align-items: center; justify-content: center; font-family: 'Black Ops One'; font-size: 32px; color: #444; border-right: 1px solid #222; background: #0a0a0a; }
-        .armor-card.active .armor-num { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .armor-card.active .armor-num { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); background: linear-gradient(180deg, #0a0a0a, #001122); }
         .armor-info { flex: 1; padding: 0 15px; display: flex; flex-direction: column; justify-content: center; }
         .info-name { font-family: 'Rajdhani'; font-weight: 700; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: -2px; }
         .info-plat { font-family: 'Teko'; font-size: 48px; line-height: 0.9; color: #fff; text-shadow: 2px 2px 0px #000; letter-spacing: 0.5px; }
         .armor-badge { width: 130px; height: 100%; display: flex; align-items: center; justify-content: center; padding-right: 15px; }
 
-        /* --- BADGE STYLES (RESTORED ORIGINAL) --- */
-        .badge-gold-flow { width: 100%; height: 45px; position: relative; overflow: hidden; border-radius: 4px; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; background: #000; }
-        .flow-bg { position: absolute; inset: -50%; background: conic-gradient(from 0deg, #423103, var(--gold), #FFF8DC, var(--gold), #423103); animation: rotateFlow 5s linear infinite; opacity: 0.7; }
+        /* --- BADGE STYLES (BLUE) --- */
+        .badge-blue-flow { width: 100%; height: 45px; position: relative; overflow: hidden; border-radius: 4px; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; background: #000; }
+        .flow-bg { position: absolute; inset: -50%; background: conic-gradient(from 0deg, #002244, var(--primary), #E0FFFF, var(--primary), #002244); animation: rotateFlow 5s linear infinite; opacity: 0.7; }
         .flow-text { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; background: rgba(0,0,0,0.8); padding: 2px 10px; border-radius: 4px; width: 90%; }
         .ft-top { font-family: 'Rajdhani'; font-weight: 800; font-size: 9px; color: #fff; letter-spacing: 3px; }
-        .ft-bot { font-family: 'Orbitron'; font-weight: 800; font-size: 16px; color: var(--gold); letter-spacing: 1px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); white-space: nowrap; }
+        .ft-bot { font-family: 'Orbitron'; font-weight: 800; font-size: 16px; color: var(--primary); letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 136, 255, 0.5); white-space: nowrap; }
 
         .badge-red-tech { width: 100%; height: 45px; background: #1a0505; border: 1px solid var(--red); border-radius: 4px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .red-scanner { position: absolute; top:0; left:-100%; width:50%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,0,60,0.5), transparent); transform: skewX(-20deg); animation: scanFast 2s infinite linear; }
@@ -105,13 +114,13 @@
 
         /* --- BOTTOM AREA --- */
         .bottom-action-area { flex: 1; min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 20px;}
-        .sunken-btn-container { width: 120px; height: 120px; border-radius: 50%; background: #000; box-shadow: inset 10px 10px 20px #000, inset -5px -5px 15px #1a1a1a, 0 0 0 1px #111; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; transition: transform 0.2s; }
+        .sunken-btn-container { width: 120px; height: 120px; border-radius: 50%; background: #000; box-shadow: inset 10px 10px 20px #000, inset -5px -5px 15px #051a2e, 0 0 0 1px #001122; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; transition: transform 0.2s; }
         .sunken-btn-container:active { transform: scale(0.95); }
         .logo-img-sunken { width: 85px; height: 85px; object-fit: cover; border-radius: 50%; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8)); opacity: 0.9; transition: 0.3s; }
-        .sunken-btn-container:hover .logo-img-sunken { opacity: 1; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3)); }
+        .sunken-btn-container:hover .logo-img-sunken { opacity: 1; filter: drop-shadow(0 0 15px rgba(0, 136, 255, 0.3)); }
         .tap-hint { font-size: 10px; color: #444; letter-spacing: 4px; margin-top: 20px; font-weight: 900; text-transform: uppercase; }
 
-        /* --- HANGAR & SCREENSAVER (ROTATING TEXT) --- */
+        /* --- HANGAR & SCREENSAVER --- */
         #hangar-overlay { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; align-items: center; justify-content: center; overflow: hidden; }
         .door-panel { position: absolute; top:0; bottom:0; width: 50%; background: repeating-linear-gradient(45deg, #0a0a0a, #0a0a0a 10px, #050505 10px, #050505 20px); border-right: 2px solid #111; transition: transform 1.2s cubic-bezier(0.8, 0, 0.2, 1); z-index: 50; }
         #door-left { left: 0; border-right: 1px solid #222; }
@@ -122,24 +131,23 @@
         .hidden-logo-container { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10; }
         .reveal-logo { width: 220px; height: 220px; border-radius: 50%; z-index: 20; position: absolute; }
         
-        .rotating-text-wrapper {
-            position: absolute; width: 500px; height: 500px; z-index: 15;
-            animation: rotateText 20s linear infinite; 
-        }
-        .curved-text-style {
-            font-family: 'Black Ops One', cursive; /* FONT KEREN */
-            font-size: 34px;
-            fill: var(--gold);
-            letter-spacing: 5px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-        }
+        .rotating-text-wrapper { position: absolute; width: 500px; height: 500px; z-index: 15; animation: rotateText 20s linear infinite; }
+        .curved-text-style { font-family: 'Black Ops One', cursive; font-size: 34px; fill: var(--primary); letter-spacing: 5px; text-shadow: 0 0 10px rgba(0, 136, 255, 0.8); }
         @keyframes rotateText { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
 
-        /* --- LOGIN & LIST --- */
+        /* --- LOGIN & GPS OVERLAY --- */
         .screen-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(5px); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         .login-card { width: 100%; max-width: 320px; background: #111; border: 1px solid #333; padding: 40px 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8); clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px); }
         .holo-input { background: transparent; border: none; border-bottom: 1px solid #555; width: 100%; color: #fff; font-family: 'Teko'; font-size: 42px; text-align: center; margin: 20px 0; text-transform: uppercase; }
-        .btn-next { width: 100%; padding: 15px; background: #fff; color: #000; font-family: 'Rajdhani'; font-weight: bold; font-size: 18px; border:none; border-radius: 50px; cursor: pointer; }
+        .btn-next { width: 100%; padding: 15px; background: var(--primary); color: #fff; font-family: 'Rajdhani'; font-weight: bold; font-size: 18px; border:none; border-radius: 50px; cursor: pointer; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        
+        /* GPS SCAN STYLES */
+        .gps-radar { width: 150px; height: 150px; border: 2px solid var(--primary); border-radius: 50%; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(0, 136, 255, 0.3); background: rgba(0, 20, 40, 0.5); }
+        .radar-line { position: absolute; width: 50%; height: 2px; background: var(--primary); top: 50%; left: 50%; transform-origin: 0 0; animation: radarSpin 1.5s infinite linear; box-shadow: 0 0 10px var(--primary); }
+        .gps-status { margin-top: 20px; font-family: 'Teko'; font-size: 24px; color: #fff; letter-spacing: 2px; animation: blink 1s infinite; }
+        @keyframes radarSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+
         .queue-list-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; padding: 20px; backdrop-filter: blur(5px); }
         .ql-card { background: #111; border: 1px solid #333; width: 100%; max-width: 400px; margin: auto; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; max-height: 80vh; }
         .ql-body { padding: 10px; overflow-y: auto; }
@@ -153,6 +161,16 @@
             <div id="modalMsg" class="modal-msg">Message goes here...</div>
             <div id="modalBtns" class="modal-btns"></div>
         </div>
+    </div>
+
+    <div id="gpsOverlay" class="screen-overlay" style="z-index: 20001;">
+        <div class="gps-radar">
+            <div class="radar-line"></div>
+            <div style="font-size:30px;">🛰️</div>
+        </div>
+        <div class="gps-status" id="gpsStatusText">LOCATING...</div>
+        <button id="btnRetryGPS" onclick="startGPSCheck()" style="display:none; margin-top:20px; background:#333; color:#fff; border:1px solid #555; padding:10px 20px; font-family:'Teko'; font-size:18px; cursor:pointer;">COBA LAGI</button>
+        <button onclick="closeModal('gpsOverlay')" style="margin-top:10px; background:none; border:none; color:#666; font-family:'Rajdhani'; cursor:pointer;">BATAL</button>
     </div>
 
     <div id="hangar-overlay" onclick="wakeUp()">
@@ -224,14 +242,20 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, onSnapshot, runTransaction, collection, addDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // === FIREBASE CONFIG ===
         const firebaseConfig = {
-            apiKey: "AIzaSyB666i9lYWIpxOdkwpoX9EvFvHLmHczeq8",
-            authDomain: "fcgadingnew22.firebaseapp.com",
-            projectId: "fcgadingnew22",
-            storageBucket: "fcgadingnew22.firebasestorage.app",
-            messagingSenderId: "537736846678",
-            appId: "1:537736846678:web:53788d71a196423ac08af7"
+          apiKey: "AIzaSyAagBU9TGkVIHFk-eMFew4BK_ZG5UgQyYA",
+          authDomain: "margonda-30359.firebaseapp.com",
+          projectId: "margonda-30359",
+          storageBucket: "margonda-30359.firebasestorage.app",
+          messagingSenderId: "224624594572",
+          appId: "1:224624594572:web:897879cc014d763bc1f5a9"
         };
+        
+        // === LOGIC GPS & LOKASI MARGONDA ===
+        const OFFICE_LOC = { lat: -6.396485, lng: 106.821571 };
+        const MAX_KM = 0.5; // Radius 500 meter toleransi
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const mainRef = doc(db, "antrian", "utama");
@@ -247,7 +271,56 @@
         function escapeHtml(text) { if (!text) return ""; return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
         function addUserLog(action, details) { addDoc(logRef, { actor: myPlat || "GUEST", action: action, details: details, timestamp: new Date() }).catch(e=>{}); }
 
-        // === CUSTOM MODAL (Required) ===
+        // === FUNGSI ADMIN TOGGLE (Baru) ===
+        window.toggleAdmin = () => {
+            let p = prompt("MASUKKAN PASSWORD ADMIN:");
+            if(p === "8899") {
+                window.location.href = "admin.html";
+            } else if (p !== null) {
+                showAlert("PASSWORD SALAH!", "ERROR");
+            }
+        };
+
+        // === FUNGSI HITUNG JARAK (Haversine) ===
+        function getDist(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        }
+
+        // === LOGIC CHECK GPS ===
+        window.startGPSCheck = () => {
+            if(!navigator.geolocation) return showAlert("GPS TIDAK DIDUKUNG BROWSER INI.");
+            
+            // Tampilkan Overlay Scanning
+            $('gpsOverlay').style.display = 'flex';
+            $('gpsStatusText').innerText = "MENCARI LOKASI...";
+            $('btnRetryGPS').style.display = 'none';
+
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const dist = getDist(pos.coords.latitude, pos.coords.longitude, OFFICE_LOC.lat, OFFICE_LOC.lng);
+                
+                // Delay sedikit biar efek scanning kelihatan keren
+                setTimeout(() => {
+                    $('gpsOverlay').style.display = 'none';
+                    if (dist <= MAX_KM) {
+                        showLoginForm(); // Lolos, buka form login
+                    } else {
+                        showAlert(`LOKASI KEJAUHAN!\nJARAK: ${dist.toFixed(2)} KM\nHARAP MERAPAT KE SHOWROOM.`);
+                    }
+                }, 1500);
+
+            }, (err) => {
+                $('gpsStatusText').innerText = "GPS ERROR / DITOLAK";
+                $('btnRetryGPS').style.display = 'inline-block';
+            }, { enableHighAccuracy: true, timeout: 10000 });
+        };
+
+        // === CUSTOM MODAL ===
         window.showAlert = (msg, title="INFO") => {
             $('modalTitle').innerText = title; $('modalMsg').innerText = msg;
             $('modalBtns').innerHTML = `<button class="btn-modal btn-yes" onclick="closeCustomModal()">OK</button>`;
@@ -262,7 +335,7 @@
         window.closeCustomModal = () => { $('customModal').classList.remove('active'); setTimeout(() => $('customModal').style.display = 'none', 200); };
         window.closeModal = (id) => { $(id).style.display = 'none'; };
 
-        // === INPUT PLAT OTOMATIS (FIXED) ===
+        // === INPUT PLAT OTOMATIS ===
         $('regInput').addEventListener('input', function(e) {
             if(formStep === 0) {
                 let v = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -279,24 +352,21 @@
             }
         });
 
-        // === HANGAR / SCREENSAVER LOGIC ===
+        // === SCREENSAVER LOGIC ===
         let idleTime = 0; let isStandby = false;
         setInterval(() => { 
             idleTime++; 
             const limit = myPlat ? 300 : 30; 
             if (idleTime > limit && !isStandby) enterStandby(); 
         }, 1000);
-
         function resetTimer() { idleTime = 0; }
         window.onclick = resetTimer; window.ontouchstart = resetTimer;
-        
         function enterStandby() { 
-            if($('regModal').style.display === 'flex') return;
+            if($('regModal').style.display === 'flex' || $('gpsOverlay').style.display === 'flex') return;
             isStandby = true; 
             const el = $('hangar-overlay'); el.style.display = 'flex';
             setTimeout(() => el.classList.remove('open'), 50); 
         }
-        
         window.wakeUp = () => { 
             if(!isStandby) return; 
             const el = $('hangar-overlay'); el.classList.add('open'); 
@@ -324,9 +394,6 @@
                     const role = s.role ? s.role.toUpperCase() : "GUEST";
                     const isMe = (cleanStr(s.plat) === cleanStr(myPlat));
                     
-                    let kudetaHTML = '';
-                    // Logic kudeta bisa ditambah disini jika perlu (sesuai script lama)
-
                     div.innerHTML = `
                         <div class="armor-border"></div>
                         <div class="armor-inner">
@@ -336,7 +403,6 @@
                                 <div class="info-plat">${s.plat}</div>
                             </div>
                             <div class="armor-badge">${getBadgeHTML(role)}</div>
-                            ${kudetaHTML}
                         </div>`;
                     div.onclick = () => { if(isMe) showConfirm("SELESAI CHARGING?", () => stopCharging(i)); };
 
@@ -349,30 +415,22 @@
             $('nextQDisplay').innerText = localQueue.length > 0 ? localQueue[0].plat : "--";
         }
 
-        // === FIXED BADGE LOGIC ===
+        // === BADGE LOGIC ===
         function getBadgeHTML(r) {
             if(!r) r = "GUEST";
-            if(r === "GUEST") return `<div class="badge-empty"></div>`; // FIX: GUEST = KOSONG
-            
-            // KOKOH PEA
+            if(r === "GUEST") return `<div class="badge-empty"></div>`; 
             if(r === "PEA" || r === "KOKOH PEA") return `<div class="badge-kokoh-pea-chaos"><div class="pea-img-chaos"><img src="cris.png" alt="PEA"></div><div class="pea-text-chaos"><div class="pea-word-chaos">KOKOH<br>PEA</div><div class="pea-sub-chaos">404 WARAS NOT FOUND</div></div></div>`;
-
-            // MEMBER/KELUARGA
             if(r === "MEMBER" || r.includes("KELUARGA") || r.includes("KETUA") || r.includes("WAKETUM") || r.includes("PEMBINA")) {
                 let txtTop = "KELUARGA"; let txtBot = "M L U";
                 if(r.includes("KETUA")) { txtTop="KETUA"; txtBot="UMUM"; }
                 if(r.includes("WAKETUM")) { txtTop="WAKIL"; txtBot="KETUM"; }
                 if(r.includes("PEMBINA")) { txtTop="DEWAN"; txtBot="PEMBINA"; }
-                return `<div class="badge-gold-flow"><div class="flow-bg"></div><div class="flow-text"><div class="ft-top">${txtTop}</div><div class="ft-bot">${txtBot}</div></div></div>`;
+                return `<div class="badge-blue-flow"><div class="flow-bg"></div><div class="flow-text"><div class="ft-top">${txtTop}</div><div class="ft-bot">${txtBot}</div></div></div>`;
             }
-
-            // ROLES LAIN
             if(r.includes("SATGAS") || r.includes("KORLAP")) return `<div class="badge-red-tech"><div class="red-scanner"></div><div class="red-word">${r.includes("KOR")?"KORLAP":"SATGAS"}</div></div>`;
             if(r.includes("TURTLE") || r.includes("PELAN")) return `<div class="badge-green-tech"><div class="green-word">PELAN TAPI KENCENG 🐢</div></div>`;
             if(r.includes("OFFICE")) return `<div class="badge-cyan-tech"><div class="cyan-word">OFFICE</div></div>`;
-            
-            // FALLBACK
-            return `<div class="badge-gold-flow"><div class="flow-bg"></div><div class="flow-text"><div class="ft-top">BADGE</div><div class="ft-bot">${r}</div></div></div>`;
+            return `<div class="badge-blue-flow"><div class="flow-bg"></div><div class="flow-text"><div class="ft-top">BADGE</div><div class="ft-bot">${r}</div></div></div>`;
         }
 
         window.openQueueList = () => {
@@ -380,12 +438,13 @@
             if(localQueue.length === 0) body.innerHTML = '<div style="text-align:center; padding:20px; color:#666;">KOSONG</div>';
             else { 
                 localQueue.forEach((q) => { 
-                    body.innerHTML += `<div style="background:#222; margin:5px; padding:10px; border-left:3px solid gold;"><div style="font-family:'Teko'; font-size:24px;">${q.plat}</div><div style="font-size:12px; color:#888;">${q.userName}</div></div>`; 
+                    body.innerHTML += `<div style="background:#222; margin:5px; padding:10px; border-left:3px solid var(--primary);"><div style="font-family:'Teko'; font-size:24px;">${q.plat}</div><div style="font-size:12px; color:#888;">${q.userName}</div></div>`; 
                 }); 
             }
             $('queueListModal').style.display = 'flex';
         };
 
+        // === ACTION BUTTON UTAMA (INTEGRASI GPS) ===
         window.handleMainAction = () => { 
             if(localStorage.getItem('myPlat')) {
                 const p = localStorage.getItem('myPlat');
@@ -394,7 +453,7 @@
                 if(inQueue || inSlot) return showAlert("ANDA SUDAH TERDAFTAR!");
                 else { localStorage.removeItem('myPlat'); myPlat=null; }
             }
-            showLoginForm(); 
+            startGPSCheck(); 
         };
 
         let formStep=0; let regData={}; const steps = [{l:"LANGKAH 1", q:"PLAT NOMOR"}, {l:"LANGKAH 2", q:"NAMA ANDA"}];
@@ -417,7 +476,7 @@
                     t.update(mainRef, { waitingQueue: arrayUnion({ plat: regData.plat, userName: regData.name, qNo: n, entryTime: Date.now(), role: userRole }), lastTicket: n });
                 }).then(() => { 
                     localStorage.setItem('myPlat', regData.plat); myPlat = regData.plat; 
-                    addUserLog("REGISTER", `${regData.plat}`);
+                    addUserLog("REGISTER", `${regData.plat} (GPS VALID)`);
                     showAlert(`SELAMAT DATANG!\nSTATUS: ${userRole}`, "SUKSES");
                 }).catch(e=>showAlert(e, "GAGAL"));
             }
