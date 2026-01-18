@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LIVE MONITOR - FC MARGONDA</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="logo.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Teko:wght@400;500;600;700&family=Rajdhani:wght@500;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -34,7 +38,7 @@
         .header-container { 
             margin-top: 20px; margin-bottom: 30px; 
             text-align: center; display: flex; flex-direction: column; align-items: center; 
-            width: 100%; cursor: pointer; /* Pointer biar tau bisa diklik */
+            width: 100%; cursor: pointer;
         }
         
         .logo-img { 
@@ -113,6 +117,16 @@
         }
         .btn-login-small:hover { border-color: var(--primary); color: #fff; }
 
+        /* PWA INSTALL BUTTON (HIDDEN BY DEFAULT) */
+        #btnInstallPWA {
+            display: none; /* Muncul lewat JS */
+            margin-top: 20px; background: rgba(0, 255, 0, 0.1); 
+            border: 1px solid #00ff00; color: #00ff00; 
+            padding: 10px 20px; font-family: 'Teko'; font-size: 18px; 
+            cursor: pointer; border-radius: 5px; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.05);} 100%{transform:scale(1);} }
+
         .link-admin { margin-top: 40px; font-size: 9px; color: #222; cursor: pointer; letter-spacing: 2px; transition: 0.3s; }
         .link-admin:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
 
@@ -168,7 +182,6 @@
         }
         .btn-modal-cancel:hover { color: #fff; border-color: #fff; }
 
-        /* GPS RADAR ANIMATION */
         .gps-radar { width: 120px; height: 120px; border: 2px solid var(--primary); border-radius: 50%; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 30px var(--primary-dim); background: rgba(0, 30, 60, 0.3); margin-bottom: 20px; }
         .radar-line { position: absolute; width: 50%; height: 2px; background: var(--primary); top: 50%; left: 50%; transform-origin: 0 0; animation: radarSpin 1.2s infinite linear; box-shadow: 0 0 10px var(--primary); }
         @keyframes radarSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -205,6 +218,10 @@
     
     <button class="btn-login-small" onclick="openModal('loginModal')">
         SUDAH DAFTAR? LOGIN
+    </button>
+
+    <button id="btnInstallPWA" onclick="installApp()">
+        ⬇ INSTALL APLIKASI
     </button>
 
     <div class="link-admin" onclick="openAdminModal()">[ STAFF ACCESS ONLY ]</div>
@@ -275,7 +292,7 @@
         };
         
         const OFFICE_LOC = { lat: -6.396485, lng: 106.821571 };
-        const MAX_KM = 0.2; // 200 METER
+        const MAX_KM = 0.2; // 200 Meter
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -341,12 +358,11 @@
                 const dist = getDist(pos.coords.latitude, pos.coords.longitude, OFFICE_LOC.lat, OFFICE_LOC.lng);
                 setTimeout(() => {
                     $('gpsOverlay').style.display = 'none';
-                    // GPS LOCK 200M (0.2 KM)
                     if (dist <= MAX_KM) {
                         openModal('regModal');
                         formStep = 0; renderRegStep();
                     } else {
-                        showAlert(`POSISI ANDA TERLALU JAUH!\nJARAK: ${dist.toFixed(2)} KM.\nSILAHKAN MERAPAT KE LOKASI (MAX 0.2 KM).`, "AKSES DITOLAK");
+                        showAlert(`POSISI ANDA TERLALU JAUH!\nJARAK: ${dist.toFixed(2)} KM.\nSILAHKAN MERAPAT KE LOKASI.`, "AKSES DITOLAK");
                     }
                 }, 1500);
             }, (err) => {
@@ -482,7 +498,7 @@
             const el = $(id);
             if(el) {
                 el.addEventListener('input', function(e) {
-                     if(id === 'adminInput') return; // Password ga usah format plat
+                     if(id === 'adminInput') return; 
                      let v = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
                      if (v.length > 0) {
                          let match = v.match(/^([A-Z]{1,2})(\d{0,4})([A-Z]*)$/);
@@ -492,6 +508,32 @@
                 });
             }
         });
+
+        // PWA INSTALL LOGIC
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const btn = document.getElementById('btnInstallPWA');
+            if(btn) btn.style.display = 'block';
+        });
+
+        window.installApp = async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    deferredPrompt = null;
+                    document.getElementById('btnInstallPWA').style.display = 'none';
+                }
+            }
+        };
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
 
     </script>
 </body>
