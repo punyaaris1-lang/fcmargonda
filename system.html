@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FC KELAPA GADING - FINAL SYSTEM</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Teko:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --bg: #050505; --gold: #FFD700; --red: #FF003C; --cyan: #00F0FF; --green: #39FF14; --neon-purple: #D000FF;
+        }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
+        
+        body { 
+            font-family: 'Rajdhani', sans-serif; background: #000;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px; 
+            color: #ddd; margin: 0; padding: 15px 20px 120px 20px; 
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;
+        }
+
+        /* --- CUSTOM MODAL --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-box { width: 90%; max-width: 350px; background: #111; border: 1px solid var(--gold); border-radius: 0; padding: 25px; text-align: center; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); transform: scale(0.9); transition: transform 0.2s; }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-title { font-family: 'Black Ops One'; color: var(--gold); font-size: 22px; margin-bottom: 10px; }
+        .modal-msg { font-family: 'Rajdhani'; color: #fff; font-size: 16px; margin-bottom: 20px; }
+        .modal-btns { display: flex; gap: 10px; justify-content: center; }
+        .btn-modal { flex: 1; padding: 10px; font-family: 'Teko'; font-size: 18px; border: none; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px); }
+        .btn-yes { background: var(--gold); color: #000; font-weight: bold; }
+        .btn-no { background: #333; color: #fff; border: 1px solid #555; }
+
+        /* --- HEADER --- */
+        .header { text-align: center; margin-bottom: 25px; margin-top: 10px; }
+        .main-title { font-family: 'Black Ops One'; font-size: 32px; line-height: 1; color: #eee; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+        .sub-title { font-size: 11px; color: var(--gold); letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin-top: 5px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
+
+        /* --- QUEUE BAR --- */
+        .queue-bar-wrapper { width: 100%; margin-bottom: 25px; cursor: pointer; }
+        .queue-bar { background: linear-gradient(180deg, #1a1a1a, #0d0d0d); clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; }
+        .queue-bar-inner { position: absolute; inset: 1px; background: linear-gradient(180deg, #151515, #0a0a0a); clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); z-index: -1; }
+        .qb-left { display: flex; flex-direction: column; }
+        .qb-lbl { font-size: 9px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+        .qb-val { font-family: 'Teko'; font-size: 28px; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .qb-tot { font-family: 'Black Ops One'; font-size: 36px; line-height: 0.8; color: #fff; }
+
+        .slot-container { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+        /* --- ARMOR CARD --- */
+        .armor-card { width: 100%; min-height: 100px; position: relative; background: #000; margin-bottom: 5px; transition: all 0.3s; clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px); }
+        .armor-border { position: absolute; inset: 0; background: #333; z-index: 0; }
+        .armor-card.active .armor-border { background: #555; box-shadow: 0 0 15px rgba(255,255,255,0.05); }
+        .armor-inner { position: absolute; inset: 1px; background: linear-gradient(90deg, #121212, #080808); clip-path: polygon(19px 0, 100% 0, 100% calc(100% - 19px), calc(100% - 19px) 100%, 0 100%, 0 19px); display: flex; align-items: center; overflow: hidden; }
+        .armor-num { width: 55px; height: 100%; min-height: 100px; display: flex; align-items: center; justify-content: center; font-family: 'Black Ops One'; font-size: 32px; color: #444; border-right: 1px solid #222; background: #0a0a0a; }
+        .armor-card.active .armor-num { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .armor-info { flex: 1; padding: 0 15px; display: flex; flex-direction: column; justify-content: center; }
+        .info-name { font-family: 'Rajdhani'; font-weight: 700; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: -2px; }
+        .info-plat { font-family: 'Teko'; font-size: 48px; line-height: 0.9; color: #fff; text-shadow: 2px 2px 0px #000; letter-spacing: 0.5px; }
+        .armor-badge { width: 130px; height: 100%; display: flex; align-items: center; justify-content: center; padding-right: 15px; }
+
+        /* --- BADGE STYLES (RESTORED ORIGINAL) --- */
+        .badge-gold-flow { width: 100%; height: 45px; position: relative; overflow: hidden; border-radius: 4px; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; background: #000; }
+        .flow-bg { position: absolute; inset: -50%; background: conic-gradient(from 0deg, #423103, var(--gold), #FFF8DC, var(--gold), #423103); animation: rotateFlow 5s linear infinite; opacity: 0.7; }
+        .flow-text { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; background: rgba(0,0,0,0.8); padding: 2px 10px; border-radius: 4px; width: 90%; }
+        .ft-top { font-family: 'Rajdhani'; font-weight: 800; font-size: 9px; color: #fff; letter-spacing: 3px; }
+        .ft-bot { font-family: 'Orbitron'; font-weight: 800; font-size: 16px; color: var(--gold); letter-spacing: 1px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); white-space: nowrap; }
+
+        .badge-red-tech { width: 100%; height: 45px; background: #1a0505; border: 1px solid var(--red); border-radius: 4px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .red-scanner { position: absolute; top:0; left:-100%; width:50%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,0,60,0.5), transparent); transform: skewX(-20deg); animation: scanFast 2s infinite linear; }
+        .red-word { font-family: 'Orbitron'; font-weight: 800; font-size: 18px; color: var(--red); text-shadow: 0 0 10px #550000; z-index: 2; letter-spacing: 2px; }
+
+        .badge-green-tech { width: 100%; height: 45px; background: #020502; border: 1px solid var(--green); border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .green-word { font-family: 'Orbitron'; font-weight: 800; font-size: 12px; color: var(--green); text-shadow: 0 0 5px var(--green); white-space: nowrap; animation: textScroll 5s linear infinite; }
+
+        .badge-cyan-tech { width: 100%; height: 45px; background: #001111; border: 1px solid var(--cyan); border-radius: 4px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 5px rgba(0, 240, 255, 0.2); }
+        .cyan-word { font-family: 'Orbitron'; font-weight: 800; font-size: 16px; color: var(--cyan); letter-spacing: 2px; }
+
+        .badge-kokoh-pea-chaos { width: 100%; height: 55px; background: linear-gradient(135deg, #1a051a, #000, #1a051a); background-size: 200% 200%; border: 2px dashed var(--neon-purple); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; padding: 0 5px; position: relative; overflow: hidden; box-shadow: 0 0 15px var(--neon-purple); animation: borderRun 0.5s infinite linear, bgDisco 2s infinite alternate; }
+        .pea-img-chaos { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; overflow: hidden; background: #000; z-index: 5; position: relative; box-shadow: 0 0 10px #fff; animation: headBang 0.2s infinite alternate, shakeImg 2s infinite; margin-right: 5px; }
+        .pea-img-chaos img { width: 100%; height: 100%; object-fit: cover; }
+        .pea-text-chaos { flex: 1; text-align: center; z-index: 5; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .pea-word-chaos { font-family: 'Press Start 2P', cursive; font-size: 9px; color: #fff; text-shadow: 2px 2px 0px var(--neon-purple); line-height: 1.4; animation: glitchText 0.3s infinite; }
+        .pea-sub-chaos { font-family: 'Orbitron', sans-serif; font-size: 6px; color: var(--green); font-weight: bold; margin-top: 3px; background: #000; padding: 2px; border: 1px solid var(--green); animation: blinkTag 0.5s infinite; }
+        .badge-kokoh-pea-chaos::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(255, 0, 255, 0.3), transparent 30%); animation: spinChaos 1s infinite linear; z-index: 1; }
+
+        .badge-empty { width: 100%; height: 100%; }
+
+        @keyframes rotateFlow { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+        @keyframes scanFast { 0%{left:-100%;} 100%{left:200%;} }
+        @keyframes textScroll { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
+        @keyframes borderRun { 0% { border-color: var(--neon-purple); } 50% { border-color: #fff; } 100% { border-color: var(--green); } }
+        @keyframes headBang { 0% { transform: rotate(-10deg) scale(1); } 100% { transform: rotate(10deg) scale(1.1); } }
+        @keyframes glitchText { 0% { transform: translate(0,0); } 25% { transform: translate(-1px,1px); } 50% { transform: translate(1px,-1px); } 75% { transform: translate(-1px,0); } 100% { transform: translate(0,0); } }
+        @keyframes bgDisco { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        @keyframes blinkTag { 0%, 100% { opacity: 1; color: var(--green); } 50% { opacity: 0.5; color: #fff; } }
+        @keyframes spinChaos { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- BOTTOM AREA --- */
+        .bottom-action-area { flex: 1; min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 20px;}
+        .sunken-btn-container { width: 120px; height: 120px; border-radius: 50%; background: #000; box-shadow: inset 10px 10px 20px #000, inset -5px -5px 15px #1a1a1a, 0 0 0 1px #111; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; transition: transform 0.2s; }
+        .sunken-btn-container:active { transform: scale(0.95); }
+        .logo-img-sunken { width: 85px; height: 85px; object-fit: cover; border-radius: 50%; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8)); opacity: 0.9; transition: 0.3s; }
+        .sunken-btn-container:hover .logo-img-sunken { opacity: 1; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3)); }
+        .tap-hint { font-size: 10px; color: #444; letter-spacing: 4px; margin-top: 20px; font-weight: 900; text-transform: uppercase; }
+
+        /* --- HANGAR & SCREENSAVER (ROTATING TEXT) --- */
+        #hangar-overlay { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; align-items: center; justify-content: center; overflow: hidden; }
+        .door-panel { position: absolute; top:0; bottom:0; width: 50%; background: repeating-linear-gradient(45deg, #0a0a0a, #0a0a0a 10px, #050505 10px, #050505 20px); border-right: 2px solid #111; transition: transform 1.2s cubic-bezier(0.8, 0, 0.2, 1); z-index: 50; }
+        #door-left { left: 0; border-right: 1px solid #222; }
+        #door-right { right: 0; border-left: 1px solid #222; }
+        #hangar-overlay.open #door-left { transform: translateX(-100%); }
+        #hangar-overlay.open #door-right { transform: translateX(100%); }
+
+        .hidden-logo-container { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .reveal-logo { width: 220px; height: 220px; border-radius: 50%; z-index: 20; position: absolute; }
+        
+        .rotating-text-wrapper {
+            position: absolute; width: 500px; height: 500px; z-index: 15;
+            animation: rotateText 20s linear infinite; 
+        }
+        .curved-text-style {
+            font-family: 'Black Ops One', cursive; /* FONT KEREN */
+            font-size: 34px;
+            fill: var(--gold);
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+        @keyframes rotateText { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+
+        /* --- LOGIN & LIST --- */
+        .screen-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(5px); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .login-card { width: 100%; max-width: 320px; background: #111; border: 1px solid #333; padding: 40px 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8); clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px); }
+        .holo-input { background: transparent; border: none; border-bottom: 1px solid #555; width: 100%; color: #fff; font-family: 'Teko'; font-size: 42px; text-align: center; margin: 20px 0; text-transform: uppercase; }
+        .btn-next { width: 100%; padding: 15px; background: #fff; color: #000; font-family: 'Rajdhani'; font-weight: bold; font-size: 18px; border:none; border-radius: 50px; cursor: pointer; }
+        .queue-list-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; padding: 20px; backdrop-filter: blur(5px); }
+        .ql-card { background: #111; border: 1px solid #333; width: 100%; max-width: 400px; margin: auto; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; max-height: 80vh; }
+        .ql-body { padding: 10px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-box">
+            <div id="modalTitle" class="modal-title">TITLE</div>
+            <div id="modalMsg" class="modal-msg">Message goes here...</div>
+            <div id="modalBtns" class="modal-btns"></div>
+        </div>
+    </div>
+
+    <div id="hangar-overlay" onclick="wakeUp()">
+        <div class="hidden-logo-container">
+            <img src="logo.png" class="reveal-logo">
+            <div class="rotating-text-wrapper">
+                <svg viewBox="0 0 500 500" width="500" height="500">
+                    <defs>
+                        <path id="textCircle" d="M 100,250 A 150,150 0 1,1 400,250 A 150,150 0 1,1 100,250" />
+                    </defs>
+                    <text width="500">
+                        <textPath href="#textCircle" startOffset="0%" class="curved-text-style">
+                            FC KELAPA GADING • MAKA LINTAS UTARA • 
+                        </textPath>
+                    </text>
+                </svg>
+            </div>
+        </div>
+        <div id="door-left" class="door-panel"></div>
+        <div id="door-right" class="door-panel"></div>
+    </div>
+
+    <div class="header" ondblclick="toggleAdmin()">
+        <div class="main-title">FC KELAPA GADING</div>
+        <div class="sub-title">SELAMAT DATANG DI RUMAH MLU</div>
+    </div>
+
+    <div class="queue-bar-wrapper" onclick="openQueueList()">
+        <div class="queue-bar">
+            <div class="queue-bar-inner"></div>
+            <div class="qb-left">
+                <span class="qb-lbl">ANTRIAN BERIKUTNYA</span>
+                <div class="qb-val" id="nextQDisplay">--</div>
+            </div>
+            <div class="qb-right">
+                <div class="qb-tot" id="totalQDisplay">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slot-container" id="slotsContainer"></div>
+
+    <div class="bottom-action-area">
+        <div class="sunken-btn-container" onclick="handleMainAction()">
+            <img src="1763947427555.jpg" class="logo-img-sunken" alt="MENU">
+        </div>
+        <div class="tap-hint">TAP LOGO UNTUK DAFTAR</div>
+        <div onclick="resetApp()" style="margin-top:10px; font-size:9px; color:#333; text-decoration:underline; cursor:pointer;">[ RESET APP ]</div>
+    </div>
+
+    <div id="regModal" class="screen-overlay">
+        <div class="login-card">
+            <div style="font-size:12px; color:#666; margin-bottom:5px; text-transform:uppercase; letter-spacing:2px;" id="regLabel">LANGKAH 1</div>
+            <input type="text" id="regInput" class="holo-input" placeholder="B 1234 XYZ" autocomplete="off">
+            <button class="btn-next" onclick="nextRegStep()">LANJUT</button>
+            <button style="margin-top:20px; background:none; border:none; color:#666; font-family:'Rajdhani'; font-weight:bold; cursor:pointer;" onclick="closeModal('regModal')">BATAL</button>
+        </div>
+    </div>
+
+    <div id="queueListModal" class="queue-list-modal">
+        <div class="ql-card">
+            <div style="padding:15px; text-align:center; border-bottom:1px solid #333; font-family:'Black Ops One'; font-size:20px;">DAFTAR TUNGGU</div>
+            <div class="ql-body" id="qlBody"></div>
+            <button style="width:100%; padding:15px; background:#222; color:#fff; border:none; font-family:'Rajdhani'; font-weight:bold;" onclick="closeModal('queueListModal')">TUTUP</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, runTransaction, collection, addDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB666i9lYWIpxOdkwpoX9EvFvHLmHczeq8",
+            authDomain: "fcgadingnew22.firebaseapp.com",
+            projectId: "fcgadingnew22",
+            storageBucket: "fcgadingnew22.firebasestorage.app",
+            messagingSenderId: "537736846678",
+            appId: "1:537736846678:web:53788d71a196423ac08af7"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const mainRef = doc(db, "antrian", "utama");
+        const historyRef = collection(db, "riwayatCharging");
+        const logRef = collection(db, "activityLog");
+        
+        const $ = (id) => document.getElementById(id);
+        let localSlots = [null, null, null];
+        let localQueue = [];
+        let myPlat = localStorage.getItem('myPlat'); 
+
+        function cleanStr(s) { return s ? s.replace(/[^A-Z0-9]/gi, '').toUpperCase() : ''; }
+        function escapeHtml(text) { if (!text) return ""; return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+        function addUserLog(action, details) { addDoc(logRef, { actor: myPlat || "GUEST", action: action, details: details, timestamp: new Date() }).catch(e=>{}); }
+
+        // === CUSTOM MODAL (Required) ===
+        window.showAlert = (msg, title="INFO") => {
+            $('modalTitle').innerText = title; $('modalMsg').innerText = msg;
+            $('modalBtns').innerHTML = `<button class="btn-modal btn-yes" onclick="closeCustomModal()">OK</button>`;
+            $('customModal').style.display = 'flex'; setTimeout(() => $('customModal').classList.add('active'), 10);
+        };
+        window.showConfirm = (msg, callback) => {
+            $('modalTitle').innerText = "KONFIRMASI"; $('modalMsg').innerText = msg;
+            $('modalBtns').innerHTML = `<button class="btn-modal btn-no" onclick="closeCustomModal()">BATAL</button><button class="btn-modal btn-yes" id="btnYes">YA</button>`;
+            $('btnYes').onclick = () => { closeCustomModal(); callback(); };
+            $('customModal').style.display = 'flex'; setTimeout(() => $('customModal').classList.add('active'), 10);
+        };
+        window.closeCustomModal = () => { $('customModal').classList.remove('active'); setTimeout(() => $('customModal').style.display = 'none', 200); };
+        window.closeModal = (id) => { $(id).style.display = 'none'; };
+
+        // === INPUT PLAT OTOMATIS (FIXED) ===
+        $('regInput').addEventListener('input', function(e) {
+            if(formStep === 0) {
+                let v = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                let formatted = "";
+                if (v.length > 0) {
+                    let match = v.match(/^([A-Z]{1,2})(\d{0,4})([A-Z]*)$/);
+                    if (match) {
+                        formatted = match[1]; 
+                        if (match[2]) formatted += " " + match[2]; 
+                        if (match[3]) formatted += " " + match[3]; 
+                    } else { formatted = v; }
+                }
+                this.value = formatted;
+            }
+        });
+
+        // === HANGAR / SCREENSAVER LOGIC ===
+        let idleTime = 0; let isStandby = false;
+        setInterval(() => { 
+            idleTime++; 
+            const limit = myPlat ? 300 : 30; 
+            if (idleTime > limit && !isStandby) enterStandby(); 
+        }, 1000);
+
+        function resetTimer() { idleTime = 0; }
+        window.onclick = resetTimer; window.ontouchstart = resetTimer;
+        
+        function enterStandby() { 
+            if($('regModal').style.display === 'flex') return;
+            isStandby = true; 
+            const el = $('hangar-overlay'); el.style.display = 'flex';
+            setTimeout(() => el.classList.remove('open'), 50); 
+        }
+        
+        window.wakeUp = () => { 
+            if(!isStandby) return; 
+            const el = $('hangar-overlay'); el.classList.add('open'); 
+            setTimeout(() => { el.style.display = 'none'; isStandby = false; resetTimer(); }, 1000); 
+        };
+
+        // === CORE SYSTEM ===
+        onSnapshot(mainRef, (snap) => {
+            if (!snap.exists()) return;
+            const d = snap.data();
+            localSlots = d.chargingSlots || [null, null, null];
+            localQueue = d.waitingQueue || [];
+            updateUI();
+        });
+
+        function updateUI() {
+            const container = $('slotsContainer'); container.innerHTML = '';
+            
+            localSlots.forEach((s, i) => {
+                const isActive = s !== null;
+                const div = document.createElement('div');
+                div.className = `armor-card ${isActive ? 'active' : ''}`;
+                
+                if (isActive) {
+                    const role = s.role ? s.role.toUpperCase() : "GUEST";
+                    const isMe = (cleanStr(s.plat) === cleanStr(myPlat));
+                    
+                    let kudetaHTML = '';
+                    // Logic kudeta bisa ditambah disini jika perlu (sesuai script lama)
+
+                    div.innerHTML = `
+                        <div class="armor-border"></div>
+                        <div class="armor-inner">
+                            <div class="armor-num">${i+1}</div>
+                            <div class="armor-info">
+                                <div class="info-name">${escapeHtml(s.userName)}</div>
+                                <div class="info-plat">${s.plat}</div>
+                            </div>
+                            <div class="armor-badge">${getBadgeHTML(role)}</div>
+                            ${kudetaHTML}
+                        </div>`;
+                    div.onclick = () => { if(isMe) showConfirm("SELESAI CHARGING?", () => stopCharging(i)); };
+
+                } else {
+                    div.innerHTML = `<div class="armor-inner" style="background:#080808; border:1px solid #1a1a1a;"><div class="armor-num" style="color:#222; border-color:#111;">${i+1}</div><div class="armor-info" style="align-items:center;"><div class="info-plat" style="color:#333; letter-spacing:5px;">OPEN</div></div><div class="armor-badge"><button style="padding:5px 20px; font-family:'Rajdhani'; font-weight:bold; background:#222; color:#666; border:1px solid #333; border-radius:4px;" onclick="window.selectSlot(${i})">PILIH</button></div></div>`;
+                }
+                container.appendChild(div);
+            });
+            $('totalQDisplay').innerText = localQueue.length;
+            $('nextQDisplay').innerText = localQueue.length > 0 ? localQueue[0].plat : "--";
+        }
+
+        // === FIXED BADGE LOGIC ===
+        function getBadgeHTML(r) {
+            if(!r) r = "GUEST";
+            if(r === "GUEST") return `<div class="badge-empty"></div>`; // FIX: GUEST = KOSONG
+            
+            // KOKOH PEA
+            if(r === "PEA" || r === "KOKOH PEA") return `<div class="badge-kokoh-pea-chaos"><div class="pea-img-chaos"><img src="cris.png" alt="PEA"></div><div class="pea-text-chaos"><div class="pea-word-chaos">KOKOH<br>PEA</div><div class="pea-sub-chaos">404 WARAS NOT FOUND</div></div></div>`;
+
+            // MEMBER/KELUARGA
+            if(r === "MEMBER" || r.includes("KELUARGA") || r.includes("KETUA") || r.includes("WAKETUM") || r.includes("PEMBINA")) {
+                let txtTop = "KELUARGA"; let txtBot = "M L U";
+                if(r.includes("KETUA")) { txtTop="KETUA"; txtBot="UMUM"; }
+                if(r.includes("WAKETUM")) { txtTop="WAKIL"; txtBot="KETUM"; }
+                if(r.includes("PEMBINA")) { txtTop="DEWAN"; txtBot="PEMBINA"; }
+                return `<div class="badge-gold-flow"><div class="flow-bg"></div><div class="flow-text"><div class="ft-top">${txtTop}</div><div class="ft-bot">${txtBot}</div></div></div>`;
+            }
+
+            // ROLES LAIN
+            if(r.includes("SATGAS") || r.includes("KORLAP")) return `<div class="badge-red-tech"><div class="red-scanner"></div><div class="red-word">${r.includes("KOR")?"KORLAP":"SATGAS"}</div></div>`;
+            if(r.includes("TURTLE") || r.includes("PELAN")) return `<div class="badge-green-tech"><div class="green-word">PELAN TAPI KENCENG 🐢</div></div>`;
+            if(r.includes("OFFICE")) return `<div class="badge-cyan-tech"><div class="cyan-word">OFFICE</div></div>`;
+            
+            // FALLBACK
+            return `<div class="badge-gold-flow"><div class="flow-bg"></div><div class="flow-text"><div class="ft-top">BADGE</div><div class="ft-bot">${r}</div></div></div>`;
+        }
+
+        window.openQueueList = () => {
+            const body = $('qlBody'); body.innerHTML = '';
+            if(localQueue.length === 0) body.innerHTML = '<div style="text-align:center; padding:20px; color:#666;">KOSONG</div>';
+            else { 
+                localQueue.forEach((q) => { 
+                    body.innerHTML += `<div style="background:#222; margin:5px; padding:10px; border-left:3px solid gold;"><div style="font-family:'Teko'; font-size:24px;">${q.plat}</div><div style="font-size:12px; color:#888;">${q.userName}</div></div>`; 
+                }); 
+            }
+            $('queueListModal').style.display = 'flex';
+        };
+
+        window.handleMainAction = () => { 
+            if(localStorage.getItem('myPlat')) {
+                const p = localStorage.getItem('myPlat');
+                const inQueue = localQueue.some(q => cleanStr(q.plat) === cleanStr(p));
+                const inSlot = localSlots.some(s => s && cleanStr(s.plat) === cleanStr(p));
+                if(inQueue || inSlot) return showAlert("ANDA SUDAH TERDAFTAR!");
+                else { localStorage.removeItem('myPlat'); myPlat=null; }
+            }
+            showLoginForm(); 
+        };
+
+        let formStep=0; let regData={}; const steps = [{l:"LANGKAH 1", q:"PLAT NOMOR"}, {l:"LANGKAH 2", q:"NAMA ANDA"}];
+        function showLoginForm() { $('regModal').style.display = 'flex'; formStep = 0; renderRegStep(); }
+        function renderRegStep() { $('regLabel').innerText = steps[formStep].l; $('regInput').placeholder = (formStep===0) ? "B 1234 XYZ" : "NAMA"; $('regInput').value = ""; $('regInput').focus(); }
+        
+        window.nextRegStep = async () => {
+            let val = $('regInput').value.trim().toUpperCase(); if(!val) return;
+            if(formStep === 0) { regData.plat = val; formStep++; renderRegStep(); } 
+            else {
+                regData.name = val; $('regModal').style.display = 'none';
+                const cleanID = regData.plat.replace(/[^A-Z0-9]/g, ''); 
+                let userRole = "GUEST"; 
+                try { let m = await getDoc(doc(db, "members", cleanID)); if(m.exists()) userRole = m.data().role || "MEMBER"; } catch(e) {}
+
+                runTransaction(db, async(t) => {
+                    const d = (await t.get(mainRef)).data(); const n = (d.lastTicket||0)+1;
+                    const all = [...(d.chargingSlots||[]), ...d.waitingQueue].filter(x=>x);
+                    if(all.some(u => u.plat.replace(/[^A-Z0-9]/g, '') === cleanID)) throw "PLAT SUDAH ADA!";
+                    t.update(mainRef, { waitingQueue: arrayUnion({ plat: regData.plat, userName: regData.name, qNo: n, entryTime: Date.now(), role: userRole }), lastTicket: n });
+                }).then(() => { 
+                    localStorage.setItem('myPlat', regData.plat); myPlat = regData.plat; 
+                    addUserLog("REGISTER", `${regData.plat}`);
+                    showAlert(`SELAMAT DATANG!\nSTATUS: ${userRole}`, "SUKSES");
+                }).catch(e=>showAlert(e, "GAGAL"));
+            }
+        };
+
+        window.selectSlot = async (i) => {
+            if(!myPlat) return showAlert("DAFTAR DULU!");
+            showConfirm(`MASUK SLOT ${i+1}?`, () => {
+                 runTransaction(db, async(t)=>{
+                    const d = (await t.get(mainRef)).data(); if(d.chargingSlots[i]) throw "SLOT PENUH!";
+                    let q = d.waitingQueue; const idx = q.findIndex(x => cleanStr(x.plat) === cleanStr(myPlat));
+                    if(idx === -1) throw "DAFTAR ULANG!";
+                    const me = q[idx]; q.splice(idx, 1); me.startTime = Date.now(); d.chargingSlots[i] = me;
+                    t.update(mainRef, { chargingSlots: d.chargingSlots, waitingQueue: q });
+                }).then(() => addUserLog("START", `Slot ${i+1}`)).catch(e => showAlert(e));
+            });
+        };
+        
+        window.stopCharging = (i) => {
+             runTransaction(db, async(t)=>{ 
+                 const d = (await t.get(mainRef)).data(); 
+                 const u = d.chargingSlots[i];
+                 if(u) addDoc(historyRef, {...u, finishTime: new Date(), action: "STOP"});
+                 d.chargingSlots[i] = null; 
+                 t.update(mainRef, {chargingSlots: d.chargingSlots}); 
+             }).then(() => { localStorage.clear(); myPlat=null; location.reload(); });
+        };
+
+        window.resetApp = () => showConfirm("RESET APLIKASI?", () => { localStorage.clear(); location.reload(); });
+        
+        window.onload = () => {
+            if(localStorage.getItem('myPlat')) { isStandby = false; $('hangar-overlay').style.display = 'none'; $('hangar-overlay').classList.add('open'); } 
+            else { enterStandby(); }
+        };
+    </script>
+</body>
+</html>

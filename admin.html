@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN TITANIUM - FC KG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;500;700&family=Rajdhani:wght@500;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* === STYLE TITANIUM ORIGINAL === */
+        :root { 
+            --bg: #050505; --panel: #111; --border: #333; 
+            --gold: #FFD700; --cyan: #00F0FF; --red: #FF003C; 
+            --purple: #D000FF; --green: #39FF14;
+        }
+        body { 
+            background: #000; color: #ddd; font-family: 'Rajdhani', sans-serif; padding: 10px; font-size: 12px; margin: 0; 
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .box { border: 1px solid #333; padding: 15px; margin-bottom: 15px; background: #0a0a0a; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h3 { margin: 0 0 15px 0; color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 5px; font-family: 'Orbitron', sans-serif; font-size: 14px; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; }
+        
+        button { cursor: pointer; padding: 8px 15px; font-weight: bold; font-family: 'Teko'; font-size: 16px; letter-spacing: 1px; border-radius: 4px; transition: 0.2s; border: none; text-transform: uppercase; }
+        button:active { transform: scale(0.95); }
+        
+        .btn-red { background: linear-gradient(45deg, #900, #d00); color: #fff; border: 1px solid #f00; }
+        .btn-green { background: linear-gradient(45deg, #050, #090); color: #fff; border: 1px solid #0f0; }
+        .btn-blue { background: linear-gradient(45deg, #005, #009); color: #fff; border: 1px solid #00f; }
+        .btn-gold { background: linear-gradient(45deg, #B8860B, #FFD700); color: #000; border: 1px solid #FFD700; }
+        .btn-mini { padding: 4px 8px; font-size: 12px; margin: 2px; }
+
+        input, select { background: #151515; color: #fff; border: 1px solid #444; padding: 10px; border-radius: 4px; font-family: 'Rajdhani'; font-weight:bold; width: 100%; box-sizing: border-box; margin-bottom:5px; text-transform: uppercase; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 11px; }
+        td, th { border-bottom: 1px solid #222; padding: 8px; text-align: left; vertical-align: middle; }
+        th { color: var(--cyan); text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+        .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .slot-item { border: 1px solid #333; padding: 10px; background: #050505; text-align: center; border-radius: 6px; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+        .slot-item.active { border-color: var(--cyan); background: rgba(0, 240, 255, 0.05); }
+        
+        /* BADGE LABEL DI ADMIN */
+        .adm-badge { font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: bold; display: inline-block; margin-top: 3px; }
+        .bg-pea { background: var(--purple); color: #fff; }
+        .bg-gold { background: var(--gold); color: #000; }
+        .bg-red { background: var(--red); color: #fff; }
+        .bg-green { background: var(--green); color: #000; }
+        .bg-cyan { background: var(--cyan); color: #000; }
+        .bg-guest { background: #333; color: #aaa; }
+
+        .term-container { background: #000; border: 1px solid #333; height: 150px; overflow-y: auto; padding: 10px; font-family: 'Courier New', monospace; font-size: 10px; color: #888; border-radius: 5px; display: flex; flex-direction: column; }
+        .log-line { margin-bottom: 4px; border-bottom: 1px solid #111; padding-bottom: 2px; }
+        
+        .adm-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+
+        /* MODAL */
+        #customModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-box { background: #111; border: 1px solid var(--gold); width: 85%; max-width: 300px; padding: 25px; border-radius: 10px; text-align: center; box-shadow: 0 0 30px rgba(255, 215, 0, 0.1); }
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .mb-yes { flex:1; background: var(--gold); color: #000; }
+        .mb-no { flex:1; background: #333; color: #fff; border: 1px solid #555; }
+
+    </style>
+</head>
+<body>
+
+    <div class="adm-header">
+        <div>
+            <div style="font-family:'Black Ops One'; font-size:20px; color:#fff;">ADMIN PANEL</div>
+            <div style="font-size:10px; color:#666;">TITANIUM VERSION</div>
+        </div>
+        <button onclick="window.location.href='system.html'" class="btn-blue" style="font-size:12px;">KE LAYAR DEPAN</button>
+    </div>
+
+    <div class="box" style="border-top: 2px solid var(--cyan);">
+        <h3>LIVE MONITORING (SLOT)</h3>
+        <div class="slot-grid">
+            <div id="slot1" class="slot-item">...</div>
+            <div id="slot2" class="slot-item">...</div>
+            <div id="slot3" class="slot-item">...</div>
+        </div>
+        
+        <div style="margin-top:15px; background:#111; padding:10px; border-radius:5px; display:flex; align-items:center; gap:5px;">
+            <span style="font-size:10px; color:#666;">SWAP:</span>
+            <select id="moveSrc" style="padding:5px; width:auto;"><option value="0">SLOT 1</option><option value="1">SLOT 2</option><option value="2">SLOT 3</option></select>
+            <span style="color:#666;">➡</span>
+            <select id="moveDest" style="padding:5px; width:auto;"><option value="1">SLOT 2</option><option value="2">SLOT 3</option><option value="0">SLOT 1</option></select>
+            <button onclick="askConfirm('Tukar Posisi User?', moveSlotUser)" class="btn-blue btn-mini">GO</button>
+        </div>
+    </div>
+
+    <div class="box" style="border-top: 2px solid var(--gold);">
+        <h3>
+            DAFTAR ANTRIAN
+            <button onclick="askConfirm('RESET URUTAN NOMOR JADI 1? (ORANG TETAP ADA)', resetTicketNumbers)" class="btn-red btn-mini" style="font-size:10px;">♻ RESET NOMOR</button>
+        </h3>
+        
+        <div id="queueTable" style="max-height:300px; overflow-y:auto; margin-bottom:15px; border:1px solid #222;"></div>
+        
+        <div style="background:#111; padding:10px; border-radius:5px;">
+            <div style="font-size:10px; color:var(--gold); margin-bottom:5px;">FORCE INPUT (VIP/MANUAL)</div>
+            <div style="display:flex; gap:5px;">
+                <input id="newPlat" placeholder="PLAT (CONTOH: B 7777 PEA)" style="flex:2;">
+                <input id="newNama" placeholder="NAMA" style="flex:2;">
+            </div>
+            <div style="display:flex; gap:5px; margin-top:5px;">
+                <button onclick="manualAdd('queue')" class="btn-green" style="flex:2;">+ ANTRIAN</button>
+                <button onclick="manualAdd(0)" class="btn-gold" style="flex:1;">S1</button>
+                <button onclick="manualAdd(1)" class="btn-gold" style="flex:1;">S2</button>
+                <button onclick="manualAdd(2)" class="btn-gold" style="flex:1;">S3</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="box" style="border: 1px dashed var(--red);">
+        <h3 style="color:var(--red);">EMERGENCY ZONE</h3>
+        <div style="display:flex; gap:10px;">
+            <button onclick="checkRecovery()" class="btn-blue" style="flex:1;">📂 CEK SNAPSHOT</button>
+            <button onclick="askConfirm('RESET SEMUA DATA (HAPUS SEMUA)?', hardReset)" class="btn-red" style="flex:1;">💀 KOSONGKAN SISTEM</button>
+        </div>
+        <div id="recoveryPanel" style="display:none; margin-top:10px; background:#220000; padding:10px; border:1px solid var(--red);">
+            <div id="recList" style="font-size:10px; margin-bottom:10px; color:#fff;"></div>
+            <button onclick="executeRestore()" class="btn-green" style="width:100%;">PULIHKAN DATA</button>
+        </div>
+    </div>
+
+    <div style="font-size:10px; color:#444; margin-bottom:5px;">SYSTEM LOGS:</div>
+    <div class="term-container" id="termLog"></div>
+
+    <div id="customModal">
+        <div class="modal-box">
+            <h2 style="margin:0 0 10px 0; font-family:'Teko'; color:#fff; font-size:24px;">KONFIRMASI</h2>
+            <div id="modalText" style="color:#ccc; margin-bottom:20px; font-size:14px;">Text</div>
+            <div class="modal-btns">
+                <button id="btnYes" class="mb-yes">YA, LANJUTKAN</button>
+                <button onclick="closeModal()" class="mb-no">BATAL</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, runTransaction, collection, addDoc, query, orderBy, limit, getDocs, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB666i9lYWIpxOdkwpoX9EvFvHLmHczeq8", authDomain: "fcgadingnew22.firebaseapp.com", projectId: "fcgadingnew22", storageBucket: "fcgadingnew22.firebasestorage.app", messagingSenderId: "537736846678", appId: "1:537736846678:web:53788d71a196423ac08af7" };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const mainRef = doc(db, "antrian", "utama");
+        const logRef = collection(db, "activityLog");
+        const snapshotRef = doc(db, "antrian", "snapshot");
+
+        let cachedSlots = [null, null, null];
+        let cachedQueue = [];
+        let snapshotData = null;
+
+        // AUTH SIMPLE
+        if(localStorage.getItem('adm_sess')) {} 
+        else { 
+            let p = prompt("PIN ADMIN:"); 
+            if(p==="1131") localStorage.setItem('adm_sess','1'); 
+            else { alert("Salah!"); location.reload(); } 
+        }
+
+        // MODAL
+        let currentCallback = null;
+        window.askConfirm = (text, callback) => {
+            document.getElementById('modalText').innerText = text;
+            document.getElementById('customModal').style.display = 'flex';
+            currentCallback = callback;
+        };
+        document.getElementById('btnYes').onclick = () => { if(currentCallback) currentCallback(); closeModal(); };
+        window.closeModal = () => { document.getElementById('customModal').style.display = 'none'; currentCallback = null; };
+
+        // === MONITOR ===
+        onSnapshot(mainRef, (snap) => {
+            if (!snap.exists()) return;
+            const d = snap.data();
+            cachedSlots = d.chargingSlots || [null,null,null];
+            cachedQueue = d.waitingQueue || [];
+            updateMonitor();
+        });
+
+        function updateMonitor() {
+            // UPDATE SLOT
+            cachedSlots.forEach((s, i) => {
+                const el = document.getElementById(`slot${i+1}`);
+                if(s) {
+                    let badgeClass = "bg-guest"; let roleText = s.role || "GUEST";
+                    if(roleText === "MEMBER" || roleText.includes("KELUARGA") || roleText.includes("KETUA")) { badgeClass = "bg-gold"; }
+                    else if(roleText.includes("PEA")) { badgeClass = "bg-pea"; }
+                    else if(roleText.includes("SATGAS")) { badgeClass = "bg-red"; }
+                    else if(roleText.includes("TURTLE")) { badgeClass = "bg-green"; }
+                    else if(roleText.includes("OFFICE")) { badgeClass = "bg-cyan"; }
+                    else if(roleText === "GUEST") { roleText = "NON-MEMBER"; }
+
+                    el.className = "slot-item active";
+                    el.innerHTML = `
+                        <div>
+                            <div style="font-size:24px; font-family:'Teko'; color:#fff; line-height:1;">${s.plat}</div>
+                            <div style="font-size:10px; color:#aaa;">${s.userName}</div>
+                            <span class="adm-badge ${badgeClass}">${roleText}</span>
+                        </div>
+                        <div style="display:grid; gap:2px; width:100%;">
+                            <button class="btn-red btn-mini" onclick="askConfirm('Keluarkan User ini?', ()=>forceStop(${i}))">STOP / KICK</button>
+                            <button class="btn-gold btn-mini" onclick="askConfirm('Pindahkan ke Antrian?', ()=>kickToQueue(${i}))">KE ANTRIAN</button>
+                        </div>
+                    `;
+                } else {
+                    el.className = "slot-item";
+                    el.innerHTML = `<div style="color:#333; margin:auto;">KOSONG</div>`;
+                }
+            });
+
+            // UPDATE QUEUE TABLE
+            let h = `<table><tr><th width="20">#</th><th>PLAT / NAMA</th><th width="120">PINDAH KE</th><th width="40">AKSI</th></tr>`;
+            if(cachedQueue.length === 0) h += `<tr><td colspan="4" style="text-align:center; padding:10px; color:#444;">TIDAK ADA ANTRIAN</td></tr>`;
+            
+            cachedQueue.forEach((q, idx) => {
+                let badgeClass = "bg-guest"; let roleText = q.role || "GUEST";
+                if(roleText === "MEMBER" || roleText.includes("KELUARGA")) badgeClass = "bg-gold";
+                
+                h += `<tr>
+                    <td style="font-size:14px; font-weight:bold; color:var(--cyan)">${q.qNo}</td>
+                    <td><b style="color:#fff; font-size:14px;">${q.plat}</b><br><span style="color:#888;">${q.userName}</span> <span class="adm-badge ${badgeClass}" style="font-size:8px;">${roleText}</span></td>
+                    <td>
+                        <div style="display:flex; gap:2px;">
+                            <button class="btn-gold btn-mini" onclick="forceToSlot('${q.plat}', 0)">S1</button>
+                            <button class="btn-gold btn-mini" onclick="forceToSlot('${q.plat}', 1)">S2</button>
+                            <button class="btn-gold btn-mini" onclick="forceToSlot('${q.plat}', 2)">S3</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display:flex; gap:2px;">
+                            <button class="btn-blue btn-mini" onclick="switchQueue(${idx}, -1)">⬆</button>
+                            <button class="btn-blue btn-mini" onclick="switchQueue(${idx}, 1)">⬇</button>
+                            <button class="btn-red btn-mini" onclick="askConfirm('Hapus?', ()=>delQueue('${q.plat}'))">X</button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+            document.getElementById('queueTable').innerHTML = h + `</table>`;
+        }
+
+        // === FITUR BARU: RESET NOMOR (RE-INDEX) ===
+        window.resetTicketNumbers = () => {
+            runTransaction(db, async(t) => {
+                const d = (await t.get(mainRef)).data();
+                let queue = d.waitingQueue || [];
+                queue.forEach((q, index) => { q.qNo = index + 1; });
+                t.update(mainRef, { waitingQueue: queue, lastTicket: queue.length });
+                addLog("ADMIN", "RESET_NUMBER", `Re-indexed ${queue.length} users`);
+            }).then(() => alert("Nomor berhasil diurutkan ulang dari 1!")).catch(e => alert("Gagal: " + e));
+        };
+
+        // === INPUT MANUAL (FORCE) ===
+        window.manualAdd = async (target) => {
+            const p = document.getElementById('newPlat').value.trim().toUpperCase();
+            const n = document.getElementById('newNama').value.trim().toUpperCase();
+            if(!p) return alert("Plat Nomor Wajib Diisi!");
+
+            // Cek Role dari DB (Biar sinkron sama System)
+            let userRole = "GUEST";
+            const cleanID = p.replace(/[^A-Z0-9]/g, '');
+            try {
+                let m = await getDoc(doc(db, "members", cleanID));
+                if(m.exists()) userRole = m.data().role || "MEMBER";
+            } catch(e) {}
+
+            runTransaction(db, async(t) => {
+                const docSnap = await t.get(mainRef);
+                let d = docSnap.data();
+                if([...(d.chargingSlots||[]), ...d.waitingQueue].some(u => u && u.plat === p)) throw "User sudah ada!";
+
+                const newNo = (d.lastTicket||0)+1;
+                const u = { plat:p, userName:n||"MANUAL", qNo:newNo, entryTime:Date.now(), role: userRole };
+
+                if(target === 'queue') d.waitingQueue.push(u); 
+                else { 
+                    if(d.chargingSlots[target]) throw "Slot Penuh!"; 
+                    u.startTime = Date.now(); d.chargingSlots[target] = u; 
+                }
+
+                // SIMPAN SNAPSHOT OTOMATIS
+                t.set(snapshotRef, { ...d, backupTime: new Date() });
+                t.update(mainRef, { waitingQueue:d.waitingQueue, chargingSlots:d.chargingSlots, lastTicket:newNo });
+                addLog("ADMIN", "MANUAL_INPUT", `Add ${p} (${userRole})`);
+            }).then(() => {
+                document.getElementById('newPlat').value = '';
+                document.getElementById('newNama').value = '';
+            }).catch(e => alert("GAGAL: " + e));
+        };
+
+        // === ACTION BUTTONS ===
+        window.forceToSlot = (plat, slotIdx) => {
+            runTransaction(db, async(t) => {
+                const d = (await t.get(mainRef)).data();
+                if(d.chargingSlots[slotIdx]) throw "SLOT TERISI!";
+                const qIdx = d.waitingQueue.findIndex(x => x.plat === plat);
+                if(qIdx === -1) throw "User hilang.";
+                const user = d.waitingQueue.splice(qIdx, 1)[0];
+                user.startTime = Date.now();
+                d.chargingSlots[slotIdx] = user;
+                t.update(mainRef, { chargingSlots: d.chargingSlots, waitingQueue: d.waitingQueue });
+                addLog("ADMIN", "FORCE_SLOT", `${plat} -> S${slotIdx+1}`);
+            }).catch(e => alert(e));
+        };
+
+        window.forceStop = (i) => {
+            runTransaction(db, async(t) => {
+                const d = (await t.get(mainRef)).data();
+                d.chargingSlots[i] = null;
+                t.update(mainRef, { chargingSlots: d.chargingSlots });
+                addLog("ADMIN", "STOP", `Slot ${i+1}`);
+            });
+        };
+
+        window.kickToQueue = (i) => {
+            runTransaction(db, async(t) => {
+                const d = (await t.get(mainRef)).data();
+                const u = d.chargingSlots[i];
+                if(u) {
+                    d.chargingSlots[i] = null; delete u.startTime; 
+                    d.waitingQueue.unshift(u);
+                    t.update(mainRef, { chargingSlots: d.chargingSlots, waitingQueue: d.waitingQueue });
+                }
+            });
+        };
+
+        window.moveSlotUser = () => {
+            const s1 = document.getElementById('moveSrc').value;
+            const s2 = document.getElementById('moveDest').value;
+            if(s1 == s2) return alert("Pilih slot beda!");
+            runTransaction(db, async(t) => {
+                const d = (await t.get(mainRef)).data();
+                const temp = d.chargingSlots[s1];
+                d.chargingSlots[s1] = d.chargingSlots[s2];
+                d.chargingSlots[s2] = temp;
+                t.update(mainRef, { chargingSlots: d.chargingSlots });
+            });
+        };
+
+        window.switchQueue = (idx, dir) => {
+            runTransaction(db, async(t) => {
+                const d = (await t.get(mainRef)).data();
+                let q = d.waitingQueue;
+                const target = idx + dir;
+                if(target >= 0 && target < q.length) {
+                    [q[idx], q[target]] = [q[target], q[idx]];
+                    t.update(mainRef, { waitingQueue: q });
+                }
+            });
+        };
+
+        window.delQueue = (p) => {
+            runTransaction(db, async(t) => {
+                const d = (await t.get(mainRef)).data();
+                const newQ = d.waitingQueue.filter(x => x.plat !== p);
+                t.update(mainRef, { waitingQueue: newQ });
+            });
+        };
+
+        // === SNAPSHOT & LOG ===
+        window.checkRecovery = async () => {
+            const s = await getDoc(snapshotRef);
+            if(!s.exists()) return alert("Tidak ada backup.");
+            snapshotData = s.data();
+            document.getElementById('recList').innerText = `BACKUP: ${snapshotData.backupTime ? snapshotData.backupTime.toDate().toLocaleTimeString() : '-'}`;
+            document.getElementById('recoveryPanel').style.display = 'block';
+        };
+
+        window.executeRestore = () => {
+            if(!snapshotData) return;
+            runTransaction(db, async(t) => {
+                t.set(mainRef, { chargingSlots: snapshotData.chargingSlots || [null,null,null], waitingQueue: snapshotData.waitingQueue || [], lastTicket: snapshotData.lastTicket || 0 });
+                addLog("ADMIN", "RESTORE", "Restored Snapshot");
+            });
+            document.getElementById('recoveryPanel').style.display = 'none';
+            alert("Data Pulih!");
+        };
+
+        window.hardReset = () => {
+            runTransaction(db, async(t) => {
+                t.set(mainRef, { chargingSlots: [null,null,null], waitingQueue: [], lastTicket: 0 });
+                addLog("ADMIN", "HARD_RESET", "Wiped All Data");
+            });
+        };
+
+        onSnapshot(query(logRef, orderBy("timestamp", "desc"), limit(20)), (snap) => {
+            let h = '';
+            snap.forEach(d => {
+                const x = d.data();
+                h += `<div class="log-line">[${x.timestamp ? x.timestamp.toDate().toLocaleTimeString() : '-'}] <span style="color:var(--cyan)">${x.actor}</span>: ${x.action} - ${x.details}</div>`;
+            });
+            document.getElementById('termLog').innerHTML = h;
+        });
+
+        function addLog(actor, act, det) { 
+            addDoc(logRef, { action: act, details: det, actor: actor, timestamp: new Date() }); 
+        }
+    </script>
+</body>
+</html>
