@@ -3,38 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LIVE MONITOR - FC KELAPA GADING</title>
+    <title>LIVE MONITOR - FC MARGONDA</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Teko:wght@400;600&family=Rajdhani:wght@600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --bg: #050505;
-            --gold: #FFD700; 
-            --gold-glow: rgba(255, 215, 0, 0.6);
+            /* UBAH WARNA KE BIRU */
+            --primary: #0088FF; 
+            --primary-glow: rgba(0, 136, 255, 0.6);
             --white-glow: rgba(255, 255, 255, 0.3);
+            --glass: rgba(20, 20, 20, 0.95);
         }
         
         * { box-sizing: border-box; outline: none; user-select: none; -webkit-tap-highlight-color: transparent; }
         body { 
             font-family: 'Rajdhani', sans-serif; 
             background: #000;
-            background-image: radial-gradient(circle at center, #151515 0%, #000 100%);
+            background-image: radial-gradient(circle at center, #001122 0%, #000 100%);
             color: #fff; margin: 0; padding: 20px; 
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         .header-container { margin-top: 40px; margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .logo-img { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.2)); animation: floatLogo 4s infinite ease-in-out; margin-bottom: 20px; }
+        .logo-img { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 0 30px rgba(0, 136, 255, 0.3)); animation: floatLogo 4s infinite ease-in-out; margin-bottom: 20px; }
         @keyframes floatLogo { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
 
-        .live-tag { background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; color: #00ff00; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-family: 'Orbitron'; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
-        .live-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 8px #00ff00; animation: blink 1s infinite; }
+        .live-tag { background: rgba(0, 136, 255, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 11px; font-family: 'Orbitron'; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 10px rgba(0, 136, 255, 0.2); }
+        .live-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); animation: blink 1s infinite; }
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
         .main-title { font-family: 'Black Ops One'; font-size: 8vw; max-font-size: 38px; color: #eee; text-transform: uppercase; letter-spacing: 1px; text-align: center; line-height: 1; margin-bottom: 5px; text-shadow: 0 0 20px rgba(255,255,255,0.2); white-space: nowrap; }
         @media (min-width: 450px) { .main-title { font-size: 42px; } }
-        .sub-title { font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 4px; font-weight: 800; margin-bottom: 40px; text-shadow: 0 0 15px var(--gold-glow); }
+        .sub-title { font-size: 14px; color: var(--primary); text-transform: uppercase; letter-spacing: 4px; font-weight: 800; margin-bottom: 40px; text-shadow: 0 0 15px var(--primary-glow); }
 
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 450px; margin-bottom: 60px; }
         .stat-card { background: linear-gradient(160deg, #151515, #050505); border: 1px solid #333; border-radius: 12px; padding: 25px 5px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -42,12 +44,34 @@
         .stat-value { font-family: 'Teko'; font-size: 80px; line-height: 0.8; color: #fff; text-shadow: 0 0 25px var(--white-glow); font-weight: 400; }
         .stat-sub { font-size: 10px; color: #666; font-weight: bold; text-transform: uppercase; margin-top: 10px;}
 
-        .btn-register-glow { width: 100%; max-width: 400px; background: linear-gradient(90deg, #FFD700, #ff8c00); color: #000; border: none; padding: 20px 0; font-family: 'Black Ops One'; font-size: 24px; letter-spacing: 2px; border-radius: 50px; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); transition: transform 0.2s; animation: pulseBtn 2s infinite; }
+        .btn-register-glow { width: 100%; max-width: 400px; background: linear-gradient(90deg, #0088FF, #00C6FF); color: #fff; border: none; padding: 20px 0; font-family: 'Black Ops One'; font-size: 24px; letter-spacing: 2px; border-radius: 50px; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0, 136, 255, 0.4); transition: transform 0.2s; animation: pulseBtn 2s infinite; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .btn-register-glow:active { transform: scale(0.95); }
         .btn-register-glow::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(to bottom right, rgba(255,255,255,0.4) 0%, transparent 50%, transparent 100%); transform: rotate(45deg); transition: 0.5s; }
-        @keyframes pulseBtn { 0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); transform: scale(1); } 50% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.7); transform: scale(1.02); } 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); transform: scale(1); } }
+        @keyframes pulseBtn { 0% { box-shadow: 0 0 20px rgba(0, 136, 255, 0.4); transform: scale(1); } 50% { box-shadow: 0 0 50px rgba(0, 136, 255, 0.7); transform: scale(1.02); } 100% { box-shadow: 0 0 20px rgba(0, 136, 255, 0.4); transform: scale(1); } }
 
         .link-admin { margin-top: 30px; font-size: 10px; color: #333; cursor: pointer; letter-spacing: 1px; }
+
+        /* --- MODALS & OVERLAYS --- */
+        .screen-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        
+        .login-card { width: 100%; max-width: 320px; background: #0a0a0a; border: 1px solid var(--primary); border-radius: 15px; padding: 40px 20px; text-align: center; box-shadow: 0 0 50px rgba(0, 136, 255, 0.2); position: relative; }
+        
+        .holo-input { background: transparent; border: none; border-bottom: 2px solid #333; width: 100%; color: var(--primary); font-family: 'Teko'; font-size: 42px; text-align: center; margin: 20px 0; text-transform: uppercase; transition: 0.3s; }
+        .holo-input:focus { border-color: var(--primary); }
+        
+        .btn-next { width: 100%; padding: 15px; background: var(--primary); color: #fff; font-family: 'Rajdhani'; font-weight: bold; font-size: 18px; border:none; border-radius: 50px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 136, 255, 0.3); text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        .btn-cancel { background: none; border: none; color: #666; margin-top: 20px; cursor: pointer; font-family: 'Rajdhani'; font-weight: bold; }
+
+        /* GPS RADAR STYLE */
+        .gps-radar { width: 150px; height: 150px; border: 2px solid var(--primary); border-radius: 50%; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(0, 136, 255, 0.3); background: rgba(0, 20, 40, 0.5); }
+        .radar-line { position: absolute; width: 50%; height: 2px; background: var(--primary); top: 50%; left: 50%; transform-origin: 0 0; animation: radarSpin 1.5s infinite linear; box-shadow: 0 0 10px var(--primary); }
+        .gps-status { margin-top: 20px; font-family: 'Teko'; font-size: 24px; color: #fff; letter-spacing: 2px; animation: blink 1s infinite; }
+        @keyframes radarSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* ALERT BOX */
+        .alert-box { background: #111; border: 1px solid var(--primary); padding: 20px; text-align: center; max-width: 300px; border-radius: 10px; box-shadow: 0 0 30px rgba(0,136,255,0.2); }
+        .alert-msg { font-size: 16px; color: #fff; margin-bottom: 20px; font-family: 'Rajdhani'; }
+        .alert-btn { background: var(--primary); color: #fff; padding: 10px 30px; border: none; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -72,29 +96,62 @@
         </div>
     </div>
 
-    <button class="btn-register-glow" onclick="goToSystem()">
+    <button class="btn-register-glow" onclick="startRegistration()">
         DAFTAR SEKARANG
     </button>
 
     <div class="link-admin" onclick="window.location='admin.html'">[ STAFF ACCESS ONLY ]</div>
 
+    <div id="gpsOverlay" class="screen-overlay" style="z-index: 20001;">
+        <div class="gps-radar">
+            <div class="radar-line"></div>
+            <div style="font-size:30px;">🛰️</div>
+        </div>
+        <div class="gps-status" id="gpsStatusText">MENCARI LOKASI...</div>
+        <button id="btnRetryGPS" onclick="startRegistration()" style="display:none; margin-top:20px; background:#333; color:#fff; border:1px solid #555; padding:10px 20px; font-family:'Teko'; font-size:18px; cursor:pointer;">COBA LAGI</button>
+        <button onclick="closeOverlay('gpsOverlay')" style="margin-top:10px; background:none; border:none; color:#666; font-family:'Rajdhani'; cursor:pointer;">BATAL</button>
+    </div>
+
+    <div id="regModal" class="screen-overlay">
+        <div class="login-card">
+            <div style="font-size:12px; color:#888; margin-bottom:5px; text-transform:uppercase; letter-spacing:2px;" id="regLabel">LANGKAH 1</div>
+            <input type="text" id="regInput" class="holo-input" placeholder="B 1234 XYZ" autocomplete="off">
+            <button class="btn-next" onclick="nextRegStep()" id="btnNextReg">LANJUT</button>
+            <button class="btn-cancel" onclick="closeOverlay('regModal')">BATAL</button>
+        </div>
+    </div>
+
+    <div id="customAlert" class="screen-overlay" style="z-index:20002;">
+        <div class="alert-box">
+            <div id="alertMsg" class="alert-msg">Message</div>
+            <button class="alert-btn" onclick="closeOverlay('customAlert')">OK</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, runTransaction, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // === CONFIG MARGONDA ===
         const firebaseConfig = {
-            apiKey: "AIzaSyB666i9lYWIpxOdkwpoX9EvFvHLmHczeq8",
-            authDomain: "fcgadingnew22.firebaseapp.com",
-            projectId: "fcgadingnew22",
-            storageBucket: "fcgadingnew22.firebasestorage.app",
-            messagingSenderId: "537736846678",
-            appId: "1:537736846678:web:53788d71a196423ac08af7"
+          apiKey: "AIzaSyAagBU9TGkVIHFk-eMFew4BK_ZG5UgQyYA",
+          authDomain: "margonda-30359.firebaseapp.com",
+          projectId: "margonda-30359",
+          storageBucket: "margonda-30359.firebasestorage.app",
+          messagingSenderId: "224624594572",
+          appId: "1:224624594572:web:897879cc014d763bc1f5a9"
         };
+        
+        const OFFICE_LOC = { lat: -6.396485, lng: 106.821571 };
+        const MAX_KM = 0.5; // Radius toleransi
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const mainRef = doc(db, "antrian", "utama");
         const TOTAL_SLOTS = 3;
+        const $ = (id) => document.getElementById(id);
 
+        // --- REALTIME LISTENER ---
         onSnapshot(mainRef, (snap) => {
             if (!snap.exists()) return;
             const d = snap.data();
@@ -102,21 +159,148 @@
             const usedCount = slots.filter(s => s !== null).length;
             const queue = d.waitingQueue || [];
             
-            document.getElementById('slotVal').innerText = `${usedCount}/${TOTAL_SLOTS}`;
-            document.getElementById('queueVal').innerText = queue.length;
+            $('slotVal').innerText = `${usedCount}/${TOTAL_SLOTS}`;
+            $('queueVal').innerText = queue.length;
 
-            const slotEl = document.getElementById('slotVal');
+            const slotEl = $('slotVal');
             if(usedCount === TOTAL_SLOTS) {
-                slotEl.style.color = "#FFD700"; slotEl.style.textShadow = "0 0 30px rgba(255, 215, 0, 0.5)";
+                // WARNA SAAT PENUH (Tetap Biru tapi lebih terang/glowing, atau bisa merah jika mau warning)
+                // Disini saya buat Biru Terang agar konsisten
+                slotEl.style.color = "#00F0FF"; 
+                slotEl.style.textShadow = "0 0 30px rgba(0, 240, 255, 0.8)";
             } else {
-                slotEl.style.color = "#fff"; slotEl.style.textShadow = "0 0 25px rgba(255, 255, 255, 0.3)";
+                slotEl.style.color = "#fff"; 
+                slotEl.style.textShadow = "0 0 25px rgba(255, 255, 255, 0.3)";
             }
         });
 
-        // REVISI: Link ke system.html
-        window.goToSystem = () => {
-            window.location.href = "system.html?action=register"; 
+        // --- UTILS ---
+        window.closeOverlay = (id) => { $(id).style.display = 'none'; };
+        function showAlert(msg) { $('alertMsg').innerText = msg; $('customAlert').style.display = 'flex'; }
+        function getDist(lat1, lon1, lat2, lon2) {
+            const R = 6371; const dLat = (lat2 - lat1) * Math.PI / 180; const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        }
+
+        // --- STEP 1: START REGISTRATION & GPS ---
+        window.startRegistration = () => {
+            if(localStorage.getItem('myPlat')) {
+                window.location.href = "system.html";
+                return;
+            }
+
+            if(!navigator.geolocation) return showAlert("Browser tidak support GPS.");
+            
+            $('gpsOverlay').style.display = 'flex';
+            $('gpsStatusText').innerText = "MENCARI LOKASI...";
+            $('btnRetryGPS').style.display = 'none';
+
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const dist = getDist(pos.coords.latitude, pos.coords.longitude, OFFICE_LOC.lat, OFFICE_LOC.lng);
+                setTimeout(() => {
+                    $('gpsOverlay').style.display = 'none';
+                    if (dist <= MAX_KM) {
+                        showForm(); // Lolos GPS
+                    } else {
+                        showAlert(`LOKASI TERLALU JAUH!\nJARAK: ${dist.toFixed(2)} KM.`);
+                    }
+                }, 1500);
+            }, (err) => {
+                $('gpsStatusText').innerText = "GPS ERROR/DITOLAK";
+                $('btnRetryGPS').style.display = 'inline-block';
+            }, { enableHighAccuracy: true, timeout: 10000 });
         };
+
+        // --- STEP 2: FORM INPUT ---
+        let formStep=0; let regData={}; const steps = [{l:"LANGKAH 1", q:"PLAT NOMOR"}, {l:"LANGKAH 2", q:"NAMA ANDA"}];
+        
+        function showForm() {
+            $('regModal').style.display = 'flex';
+            formStep = 0; renderRegStep();
+        }
+
+        function renderRegStep() {
+            $('regLabel').innerText = steps[formStep].l;
+            $('regInput').placeholder = (formStep===0) ? "B 1234 XYZ" : "NAMA";
+            $('regInput').value = ""; $('regInput').focus();
+        }
+
+        $('regInput').addEventListener('input', function(e) {
+            if(formStep === 0) {
+                let v = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                if (v.length > 0) {
+                    let match = v.match(/^([A-Z]{1,2})(\d{0,4})([A-Z]*)$/);
+                    if (match) {
+                        v = match[1] + (match[2] ? " "+match[2] : "") + (match[3] ? " "+match[3] : "");
+                    }
+                }
+                this.value = v;
+            }
+        });
+
+        window.nextRegStep = async () => {
+            let val = $('regInput').value.trim().toUpperCase(); 
+            if(!val) return;
+
+            if(formStep === 0) {
+                if(val.length < 3) return showAlert("Plat Nomor Tidak Valid");
+                regData.plat = val; 
+                formStep++; 
+                renderRegStep(); 
+            } else {
+                regData.name = val; 
+                submitRegistration();
+            }
+        };
+
+        // --- STEP 3: SUBMIT TO FIREBASE ---
+        async function submitRegistration() {
+            $('btnNextReg').innerText = "PROSES...";
+            $('btnNextReg').disabled = true;
+
+            const cleanID = regData.plat.replace(/[^A-Z0-9]/g, ''); 
+            let userRole = "GUEST"; 
+
+            try { 
+                let m = await getDoc(doc(db, "members", cleanID)); 
+                if(m.exists()) userRole = m.data().role || "MEMBER"; 
+            } catch(e) {}
+
+            runTransaction(db, async(t) => {
+                const d = (await t.get(mainRef)).data(); 
+                const n = (d.lastTicket||0)+1;
+                
+                const all = [...(d.chargingSlots||[]), ...d.waitingQueue].filter(x=>x);
+                if(all.some(u => u.plat.replace(/[^A-Z0-9]/g, '') === cleanID)) throw "ANDA SUDAH TERDAFTAR!";
+                
+                t.update(mainRef, { 
+                    waitingQueue: arrayUnion({ 
+                        plat: regData.plat, 
+                        userName: regData.name, 
+                        qNo: n, 
+                        entryTime: Date.now(), 
+                        role: userRole 
+                    }), 
+                    lastTicket: n 
+                });
+            }).then(() => { 
+                localStorage.setItem('myPlat', regData.plat);
+                $('regModal').style.display = 'none';
+                $('btnNextReg').innerText = "LANJUT";
+                $('btnNextReg').disabled = false;
+                
+                showAlert("PENDAFTARAN SUKSES!");
+                setTimeout(() => {
+                    window.location.href = "system.html";
+                }, 1000);
+
+            }).catch(e => {
+                $('btnNextReg').innerText = "LANJUT";
+                $('btnNextReg').disabled = false;
+                showAlert(e);
+            });
+        }
     </script>
 </body>
 </html>
