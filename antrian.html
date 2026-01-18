@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LIVE MONITOR - FC KELAPA GADING</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Teko:wght@400;600&family=Rajdhani:wght@600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --bg: #050505;
+            --gold: #FFD700; 
+            --gold-glow: rgba(255, 215, 0, 0.6);
+            --white-glow: rgba(255, 255, 255, 0.3);
+        }
+        
+        * { box-sizing: border-box; outline: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            background: #000;
+            background-image: radial-gradient(circle at center, #151515 0%, #000 100%);
+            color: #fff; margin: 0; padding: 20px; 
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .header-container { margin-top: 40px; margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .logo-img { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.2)); animation: floatLogo 4s infinite ease-in-out; margin-bottom: 20px; }
+        @keyframes floatLogo { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+
+        .live-tag { background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; color: #00ff00; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-family: 'Orbitron'; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+        .live-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 8px #00ff00; animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+        .main-title { font-family: 'Black Ops One'; font-size: 8vw; max-font-size: 38px; color: #eee; text-transform: uppercase; letter-spacing: 1px; text-align: center; line-height: 1; margin-bottom: 5px; text-shadow: 0 0 20px rgba(255,255,255,0.2); white-space: nowrap; }
+        @media (min-width: 450px) { .main-title { font-size: 42px; } }
+        .sub-title { font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 4px; font-weight: 800; margin-bottom: 40px; text-shadow: 0 0 15px var(--gold-glow); }
+
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 450px; margin-bottom: 60px; }
+        .stat-card { background: linear-gradient(160deg, #151515, #050505); border: 1px solid #333; border-radius: 12px; padding: 25px 5px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .stat-label { font-size: 11px; color: #888; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
+        .stat-value { font-family: 'Teko'; font-size: 80px; line-height: 0.8; color: #fff; text-shadow: 0 0 25px var(--white-glow); font-weight: 400; }
+        .stat-sub { font-size: 10px; color: #666; font-weight: bold; text-transform: uppercase; margin-top: 10px;}
+
+        .btn-register-glow { width: 100%; max-width: 400px; background: linear-gradient(90deg, #FFD700, #ff8c00); color: #000; border: none; padding: 20px 0; font-family: 'Black Ops One'; font-size: 24px; letter-spacing: 2px; border-radius: 50px; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); transition: transform 0.2s; animation: pulseBtn 2s infinite; }
+        .btn-register-glow:active { transform: scale(0.95); }
+        .btn-register-glow::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(to bottom right, rgba(255,255,255,0.4) 0%, transparent 50%, transparent 100%); transform: rotate(45deg); transition: 0.5s; }
+        @keyframes pulseBtn { 0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); transform: scale(1); } 50% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.7); transform: scale(1.02); } 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); transform: scale(1); } }
+
+        .link-admin { margin-top: 30px; font-size: 10px; color: #333; cursor: pointer; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <img src="logo.png" alt="MLU" class="logo-img">
+        <div class="live-tag"><div class="live-dot"></div> LIVE STATUS</div>
+        <div class="main-title">FC KELAPA GADING</div>
+        <div class="sub-title">RUMAH MLU</div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-label">STATUS SLOT</div>
+            <div class="stat-value" id="slotVal">0/3</div>
+            <div class="stat-sub">TERPAKAI / TOTAL</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">TOTAL ANTRIAN</div>
+            <div class="stat-value" id="queueVal">0</div>
+            <div class="stat-sub">MOTOR MENUNGGU</div>
+        </div>
+    </div>
+
+    <button class="btn-register-glow" onclick="goToSystem()">
+        DAFTAR SEKARANG
+    </button>
+
+    <div class="link-admin" onclick="window.location='admin.html'">[ STAFF ACCESS ONLY ]</div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB666i9lYWIpxOdkwpoX9EvFvHLmHczeq8",
+            authDomain: "fcgadingnew22.firebaseapp.com",
+            projectId: "fcgadingnew22",
+            storageBucket: "fcgadingnew22.firebasestorage.app",
+            messagingSenderId: "537736846678",
+            appId: "1:537736846678:web:53788d71a196423ac08af7"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const mainRef = doc(db, "antrian", "utama");
+        const TOTAL_SLOTS = 3;
+
+        onSnapshot(mainRef, (snap) => {
+            if (!snap.exists()) return;
+            const d = snap.data();
+            const slots = d.chargingSlots || [null, null, null];
+            const usedCount = slots.filter(s => s !== null).length;
+            const queue = d.waitingQueue || [];
+            
+            document.getElementById('slotVal').innerText = `${usedCount}/${TOTAL_SLOTS}`;
+            document.getElementById('queueVal').innerText = queue.length;
+
+            const slotEl = document.getElementById('slotVal');
+            if(usedCount === TOTAL_SLOTS) {
+                slotEl.style.color = "#FFD700"; slotEl.style.textShadow = "0 0 30px rgba(255, 215, 0, 0.5)";
+            } else {
+                slotEl.style.color = "#fff"; slotEl.style.textShadow = "0 0 25px rgba(255, 255, 255, 0.3)";
+            }
+        });
+
+        // REVISI: Link ke system.html
+        window.goToSystem = () => {
+            window.location.href = "system.html?action=register"; 
+        };
+    </script>
+</body>
+</html>
