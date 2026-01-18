@@ -34,7 +34,7 @@
         .header-container { 
             margin-top: 20px; margin-bottom: 30px; 
             text-align: center; display: flex; flex-direction: column; align-items: center; 
-            width: 100%;
+            width: 100%; cursor: pointer; /* Pointer biar tau bisa diklik */
         }
         
         .logo-img { 
@@ -55,17 +55,16 @@
         .live-dot { width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); animation: blink 1s infinite; }
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
 
-        /* --- TYPOGRAPHY FIX: JUDUL LEBIH BESAR --- */
         .main-title { 
             font-family: 'Black Ops One'; 
-            font-size: 15vw; /* Ukuran dinamis besar */
+            font-size: 15vw; 
             line-height: 0.85; color: #fff; 
             text-transform: uppercase; letter-spacing: -2px; 
             text-align: center; margin-bottom: 5px; 
             text-shadow: 0 0 30px var(--primary-glow); 
             width: 100%;
         }
-        @media (min-width: 600px) { .main-title { font-size: 90px; } } /* Limit di desktop */
+        @media (min-width: 600px) { .main-title { font-size: 90px; } }
 
         .sub-title { 
             font-size: 12px; color: var(--primary); 
@@ -245,7 +244,7 @@
     <div id="adminModal" class="screen-overlay">
         <div class="cool-modal" style="border-color: #FF003C; box-shadow: 0 0 30px rgba(255,0,60,0.2);">
             <div class="modal-title" style="color: #FF003C;">ADMIN ACCESS</div>
-            <div class="modal-desc">Area terbatas. Masukkan kode akses staff.</div>
+            <div class="modal-desc">Area terbatas. Login staff bisa dari mana saja.</div>
             <input type="password" id="adminInput" class="holo-input" placeholder="PASSCODE" style="border-color: #555;">
             <button class="btn-modal-action" onclick="checkAdmin()" style="background: #FF003C; color:#fff;">BUKA AKSES</button>
             <button class="btn-modal-cancel" onclick="closeOverlay('adminModal')">TUTUP</button>
@@ -276,7 +275,7 @@
         };
         
         const OFFICE_LOC = { lat: -6.396485, lng: 106.821571 };
-        const MAX_KM = 0.5; 
+        const MAX_KM = 0.2; // 200 METER
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -342,11 +341,12 @@
                 const dist = getDist(pos.coords.latitude, pos.coords.longitude, OFFICE_LOC.lat, OFFICE_LOC.lng);
                 setTimeout(() => {
                     $('gpsOverlay').style.display = 'none';
+                    // GPS LOCK 200M (0.2 KM)
                     if (dist <= MAX_KM) {
                         openModal('regModal');
                         formStep = 0; renderRegStep();
                     } else {
-                        showAlert(`POSISI ANDA TERLALU JAUH!\nJARAK: ${dist.toFixed(2)} KM.\nSILAHKAN MERAPAT KE LOKASI.`, "AKSES DITOLAK");
+                        showAlert(`POSISI ANDA TERLALU JAUH!\nJARAK: ${dist.toFixed(2)} KM.\nSILAHKAN MERAPAT KE LOKASI (MAX 0.2 KM).`, "AKSES DITOLAK");
                     }
                 }, 1500);
             }, (err) => {
@@ -462,7 +462,7 @@
              }
         };
 
-        // ADMIN MODAL & CHECK
+        // ADMIN MODAL & CHECK (NO GPS REQUIRED)
         window.openAdminModal = () => {
             openModal('adminModal');
         };

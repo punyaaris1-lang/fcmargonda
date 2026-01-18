@@ -34,11 +34,11 @@
 
         /* --- UI COMPONENTS --- */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-box { width: 90%; max-width: 350px; background: #111; border: 1px solid var(--primary); padding: 25px; text-align: center; box-shadow: 0 0 20px rgba(0, 136, 255, 0.2); }
+        .modal-box { width: 90%; max-width: 350px; background: #111; border: 1px solid var(--primary); padding: 25px; text-align: center; box-shadow: 0 0 20px rgba(0, 136, 255, 0.2); border-radius: 10px; }
         .modal-title { font-family: 'Black Ops One'; color: var(--primary); font-size: 22px; margin-bottom: 10px; }
         .modal-msg { font-family: 'Rajdhani'; color: #fff; font-size: 16px; margin-bottom: 20px; }
         .modal-btns { display: flex; gap: 10px; justify-content: center; }
-        .btn-modal { flex: 1; padding: 10px; font-family: 'Teko'; font-size: 18px; border: none; cursor: pointer; }
+        .btn-modal { flex: 1; padding: 10px; font-family: 'Teko'; font-size: 18px; border: none; cursor: pointer; border-radius: 5px; }
         .btn-yes { background: var(--primary); color: #fff; font-weight: bold; }
         .btn-no { background: #333; color: #fff; border: 1px solid #555; }
 
@@ -46,8 +46,9 @@
         .main-title { font-family: 'Black Ops One'; font-size: 32px; line-height: 1; color: #eee; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
         .sub-title { font-size: 11px; color: var(--primary); letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
 
-        .queue-bar-wrapper { width: 100%; margin-bottom: 25px; cursor: pointer; }
-        .queue-bar { background: #111; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-left: 2px solid var(--primary); border-radius: 0 10px 10px 0; }
+        .queue-bar-wrapper { width: 100%; margin-bottom: 25px; cursor: pointer; transition: 0.2s; }
+        .queue-bar-wrapper:active { transform: scale(0.98); }
+        .queue-bar { background: #111; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-left: 3px solid var(--primary); border-radius: 0 10px 10px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .qb-left { display: flex; flex-direction: column; }
         .qb-lbl { font-size: 9px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
         .qb-val { font-family: 'Teko'; font-size: 28px; color: #fff; display: flex; align-items: center; gap: 10px; }
@@ -55,7 +56,7 @@
 
         .slot-container { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
-        .armor-card { width: 100%; min-height: 100px; position: relative; background: #080808; margin-bottom: 5px; border: 1px solid #222; display:flex; align-items: center; overflow: hidden; }
+        .armor-card { width: 100%; min-height: 100px; position: relative; background: #080808; margin-bottom: 5px; border: 1px solid #222; display:flex; align-items: center; overflow: hidden; border-radius: 8px; }
         .armor-card.active { border-color: #444; background: linear-gradient(90deg, #101010, #000); }
         .armor-card.active.can-kudeta { border-color: var(--red); box-shadow: 0 0 10px rgba(255,0,60,0.2); }
         
@@ -71,9 +72,9 @@
         .action-area { width: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-right: 10px; gap: 5px; }
         
         /* TOMBOL-TOMBOL */
-        .btn-pilih { background: var(--primary); color: #000; font-family: 'Rajdhani'; font-weight: bold; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; animation: pulse 1.5s infinite; }
-        .btn-kudeta { background: var(--red); color: #fff; font-family: 'Rajdhani'; font-weight: bold; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 10px; width: 100%; animation: flashRed 1s infinite; }
-        .btn-stop { background: #333; color: #fff; border: 1px solid #555; padding: 5px 10px; font-size: 10px; cursor: pointer; border-radius: 4px; }
+        .btn-pilih { background: var(--primary); color: #fff; font-family: 'Rajdhani'; font-weight: bold; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; animation: pulse 1.5s infinite; width: 100%; font-size: 14px; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        .btn-kudeta { background: var(--red); color: #fff; font-family: 'Rajdhani'; font-weight: bold; border: none; padding: 8px 5px; cursor: pointer; border-radius: 4px; font-size: 11px; width: 100%; animation: flashRed 1s infinite; box-shadow: 0 0 10px var(--red); }
+        .btn-stop { background: #333; color: #fff; border: 1px solid #555; padding: 8px 10px; font-size: 12px; cursor: pointer; border-radius: 4px; width: 100%; }
 
         @keyframes pulse { 0%{opacity:0.8;} 50%{opacity:1; box-shadow: 0 0 15px var(--primary);} 100%{opacity:0.8;} }
         @keyframes flashRed { 0%{opacity:1;} 50%{opacity:0.7; box-shadow: 0 0 10px var(--red);} 100%{opacity:1;} }
@@ -86,12 +87,31 @@
         .badge-role { font-size: 9px; padding: 2px 6px; background: #222; color: #aaa; border-radius: 2px; display: inline-block; margin-top: 2px; border: 1px solid #333; }
         
         .screen-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(5px); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-        .login-card { width: 100%; max-width: 320px; background: #111; border: 1px solid #333; padding: 40px 20px; text-align: center; }
+        .login-card { width: 100%; max-width: 320px; background: #111; border: 1px solid #333; padding: 40px 20px; text-align: center; border-radius: 10px; }
         .holo-input { background: transparent; border: none; border-bottom: 1px solid #555; width: 100%; color: #fff; font-family: 'Teko'; font-size: 32px; text-align: center; margin: 20px 0; text-transform: uppercase; }
         .btn-next { width: 100%; padding: 15px; background: var(--primary); color: #fff; font-family: 'Rajdhani'; font-weight: bold; font-size: 18px; border:none; border-radius: 50px; cursor: pointer; }
+
+        /* LIST ANTRIAN MODAL */
+        .q-list-container { width: 100%; max-height: 300px; overflow-y: auto; margin-top: 15px; text-align: left; }
+        .q-item { padding: 10px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+        .q-item:nth-child(1) { background: rgba(0, 136, 255, 0.1); border-left: 3px solid var(--primary); }
+
+        /* --- GPS BLOCKER OVERLAY --- */
+        #gpsBlocker { position: fixed; inset: 0; background: #000; z-index: 30000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .gps-radar { width: 120px; height: 120px; border: 2px solid var(--primary); border-radius: 50%; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 30px rgba(0, 136, 255, 0.3); background: rgba(0, 20, 40, 0.5); margin-bottom: 20px; }
+        .radar-line { position: absolute; width: 50%; height: 2px; background: var(--primary); top: 50%; left: 50%; transform-origin: 0 0; animation: radarSpin 1.5s infinite linear; box-shadow: 0 0 10px var(--primary); }
+        @keyframes radarSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
+    <div id="gpsBlocker">
+        <div class="gps-radar"><div class="radar-line"></div><div style="font-size:30px;">🛰️</div></div>
+        <h2 style="font-family:'Black Ops One'; color:var(--primary); margin:0;">VERIFIKASI LOKASI</h2>
+        <p style="color:#888; font-size:14px; margin-top:10px;">Sistem terkunci. Sedang memastikan anda berada di area FC Margonda.</p>
+        <div id="gpsMsg" style="color:var(--red); font-weight:bold; margin-top:10px;"></div>
+        <button onclick="checkLocation()" style="margin-top:20px; padding:10px 30px; background:#333; color:#fff; border:1px solid #555; border-radius:50px; font-family:'Teko'; font-size:18px; cursor:pointer;">COBA LAGI</button>
+    </div>
 
     <div id="customModal" class="modal-overlay">
         <div class="modal-box">
@@ -106,7 +126,7 @@
         <div class="sub-title">SYSTEM MONITOR</div>
     </div>
 
-    <div class="queue-bar-wrapper">
+    <div class="queue-bar-wrapper" onclick="showQueueList()">
         <div class="queue-bar">
             <div class="qb-left">
                 <span class="qb-lbl">ANTRIAN BERIKUTNYA</span>
@@ -114,6 +134,7 @@
             </div>
             <div class="qb-right">
                 <div class="qb-tot" id="totalQDisplay">0</div>
+                <div style="font-size:9px; color:#555; text-align:center;">TAP UTK LIST</div>
             </div>
         </div>
     </div>
@@ -122,7 +143,7 @@
 
     <div class="bottom-links">
         <div class="link-recover" onclick="showRecoverModal()">LOGIN ULANG / PULIHKAN SESI</div>
-        <div style="margin-top:10px; font-size:10px; color:#333;" onclick="resetApp()">[ RESET APP ]</div>
+        <div style="margin-top:10px; font-size:10px; color:#333; cursor:pointer;" onclick="resetApp()">[ LOGOUT & RESET ]</div>
     </div>
 
     <div id="recoverModal" class="screen-overlay">
@@ -134,10 +155,19 @@
         </div>
     </div>
 
+    <div id="queueListModal" class="screen-overlay">
+        <div class="login-card" style="max-width: 400px;">
+            <div class="modal-title">DAFTAR ANTRIAN</div>
+            <div class="q-list-container" id="fullQueueList"></div>
+            <button style="margin-top:20px; width:100%; padding:10px; background:#333; color:#fff; border:none; font-family:'Teko'; font-size:18px;" onclick="document.getElementById('queueListModal').style.display='none'">TUTUP</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, runTransaction, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, runTransaction, collection, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // === CONFIG MARGONDA ===
         const firebaseConfig = {
           apiKey: "AIzaSyAagBU9TGkVIHFk-eMFew4BK_ZG5UgQyYA",
           authDomain: "margonda-30359.firebaseapp.com",
@@ -146,6 +176,9 @@
           messagingSenderId: "224624594572",
           appId: "1:224624594572:web:897879cc014d763bc1f5a9"
         };
+
+        const OFFICE_LOC = { lat: -6.396485, lng: 106.821571 };
+        const MAX_KM = 0.2; // Radius lock 200m
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -157,6 +190,34 @@
         let localSlots = [null, null, null];
         let localQueue = [];
         let myPlat = localStorage.getItem('myPlat'); 
+
+        // === GPS LOCK ON LOAD ===
+        window.checkLocation = () => {
+            $('gpsMsg').innerText = "";
+            if(!navigator.geolocation) {
+                $('gpsMsg').innerText = "GPS TIDAK DIDUKUNG BROWSER"; return;
+            }
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const dist = getDist(pos.coords.latitude, pos.coords.longitude, OFFICE_LOC.lat, OFFICE_LOC.lng);
+                if (dist <= MAX_KM) {
+                    // LOKASI AMAN
+                    $('gpsBlocker').style.display = 'none';
+                } else {
+                    $('gpsMsg').innerText = `LOKASI: ${dist.toFixed(2)} KM DARI SHOWROOM. HARAP MENDEKAT.`;
+                }
+            }, (err) => {
+                $('gpsMsg').innerText = "AKSES LOKASI DITOLAK/ERROR. WAJIB AKTIFKAN GPS.";
+            }, { enableHighAccuracy: true });
+        };
+        
+        function getDist(lat1, lon1, lat2, lon2) {
+            const R = 6371; const dLat = (lat2 - lat1) * Math.PI / 180; const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        }
+
+        // Jalankan cek lokasi saat start
+        window.onload = checkLocation;
 
         function cleanStr(s) { return s ? s.replace(/[^A-Z0-9]/gi, '').toUpperCase() : ''; }
         function addUserLog(action, details) { addDoc(logRef, { actor: myPlat || "GUEST", action: action, details: details, timestamp: new Date() }).catch(e=>{}); }
@@ -184,11 +245,11 @@
             updateUI();
         });
 
-        // === UI RENDERER (DENGAN LOGIC KUDETA & PILIH SLOT) ===
+        // === UI RENDERER ===
         function updateUI() {
             const container = $('slotsContainer'); container.innerHTML = '';
             
-            // Cek apakah saya urutan pertama di antrian
+            // Cek apakah saya urutan pertama di antrian (untuk tombol PILIH & KUDETA)
             let amIQueue1 = false;
             if(localQueue.length > 0 && myPlat) {
                 if(cleanStr(localQueue[0].plat) === cleanStr(myPlat)) amIQueue1 = true;
@@ -198,33 +259,34 @@
                 const isActive = s !== null;
                 const div = document.createElement('div');
                 
-                // Hitung Durasi
                 let durationMins = 0;
                 let timerText = "";
+                let actionHTML = "";
+                const isMe = isActive && (cleanStr(s.plat) === cleanStr(myPlat));
+
                 if (isActive) {
                     durationMins = Math.floor((Date.now() - s.startTime) / 60000);
                     timerText = `DURASI: ${durationMins} MENIT`;
                 }
 
-                // Logic Tampilan
-                let actionHTML = "";
-                const isMe = isActive && (cleanStr(s.plat) === cleanStr(myPlat));
-
-                // 1. Slot Kosong & Saya Antrian #1 -> Tampilkan Tombol PILIH
+                // --- LOGIC TOMBOL ---
+                
+                // 1. OPSI PILIH SLOT: Slot Kosong & Saya Antrian #1
                 if (!isActive && amIQueue1) {
                     actionHTML = `<button class="btn-pilih" onclick="window.selectSlot(${i})">PILIH</button>`;
                 }
-                // 2. Slot Isi, Itu Saya -> Tombol Stop
+                
+                // 2. OPSI STOP: Slot Isi & Itu Saya
                 else if (isActive && isMe) {
                     actionHTML = `<button class="btn-stop" onclick="window.stopCharging(${i})">SELESAI</button>`;
                 }
-                // 3. Slot Isi, Bukan Saya, Saya Antrian #1, Durasi > 25 Menit -> Tombol KUDETA
+                
+                // 3. OPSI KUDETA: Slot Isi & Bukan Saya & Saya Antrian #1 & Durasi > 25 Menit
                 else if (isActive && !isMe && amIQueue1) {
                     if (durationMins >= 25) {
                         actionHTML = `<button class="btn-kudeta" onclick="window.attemptKudeta(${i}, '${s.plat}')">AMBIL ALIH</button>`;
                         div.classList.add('can-kudeta');
                     } else {
-                        // Info kapan bisa kudeta
                         timerText += ` (KUDETA: ${25 - durationMins} mnt)`;
                     }
                 }
@@ -267,7 +329,7 @@
                     const d = (await t.get(mainRef)).data(); 
                     if(d.chargingSlots[i]) throw "SLOT SUDAH DIAMBIL ORANG LAIN!";
                     
-                    // Validasi Double Check
+                    // Validasi Saya masih Antrian #1
                     if(cleanStr(d.waitingQueue[0].plat) !== cleanStr(myPlat)) throw "ANDA BUKAN ANTRIAN PERTAMA!";
                     
                     let q = d.waitingQueue;
@@ -280,15 +342,21 @@
             });
         };
 
-        // 2. STOP CHARGING
+        // 2. STOP CHARGING (HAPUS CACHE)
         window.stopCharging = (i) => {
-             runTransaction(db, async(t)=>{ 
-                 const d = (await t.get(mainRef)).data(); 
-                 const u = d.chargingSlots[i];
-                 if(u) addDoc(historyRef, {...u, finishTime: new Date(), action: "STOP"});
-                 d.chargingSlots[i] = null; 
-                 t.update(mainRef, {chargingSlots: d.chargingSlots}); 
-             }).then(() => { localStorage.removeItem('myPlat'); myPlat=null; location.reload(); });
+             showConfirm("SELESAI CHARGING? SESI AKAN DIHAPUS.", () => {
+                 runTransaction(db, async(t)=>{ 
+                     const d = (await t.get(mainRef)).data(); 
+                     const u = d.chargingSlots[i];
+                     if(u) addDoc(historyRef, {...u, finishTime: new Date(), action: "STOP"});
+                     d.chargingSlots[i] = null; 
+                     t.update(mainRef, {chargingSlots: d.chargingSlots}); 
+                 }).then(() => { 
+                     localStorage.clear(); // HAPUS CACHE
+                     myPlat=null; 
+                     location.reload(); 
+                 });
+             });
         };
 
         // 3. KUDETA (AMBIL ALIH)
@@ -298,28 +366,26 @@
                     const d = (await t.get(mainRef)).data();
                     const targetSlot = d.chargingSlots[slotIdx];
                     
-                    // Validasi Slot
+                    // Validasi Slot masih orang yang sama
                     if(!targetSlot || cleanStr(targetSlot.plat) !== cleanStr(targetPlat)) throw "SLOT BERUBAH USER!";
                     
-                    // Validasi Waktu (Server Side Check)
+                    // Validasi Waktu Server
                     const duration = (Date.now() - targetSlot.startTime) / 60000;
                     if(duration < 25) throw "BELUM 25 MENIT!";
 
-                    // Validasi Saya
+                    // Validasi Saya Antrian #1
                     if(cleanStr(d.waitingQueue[0].plat) !== cleanStr(myPlat)) throw "ANDA BUKAN ANTRIAN PERTAMA!";
 
-                    // Proses:
-                    // 1. Kick user lama ke history
+                    // Proses KICK & MASUK
                     const victim = targetSlot;
                     addDoc(historyRef, {...victim, finishTime: new Date(), action: "KICKED_BY_KUDETA", kicker: myPlat});
                     
-                    // 2. Masukkan saya ke slot
                     let q = d.waitingQueue;
                     const me = q.shift();
                     me.startTime = Date.now();
                     d.chargingSlots[slotIdx] = me;
 
-                    t.update(mainRef, { chargingSlots: d.chargingSlots, waitingQueue: q });
+                    t.update(mainRef, { chargingSlots: d.chargingSlots, waitingQueue: d.waitingQueue });
                 }).then(() => {
                     addUserLog("KUDETA", `Success took over slot ${slotIdx+1} from ${targetPlat}`);
                     showAlert("BERHASIL AMBIL ALIH SLOT!", "KUDETA SUKSES");
@@ -327,14 +393,13 @@
             });
         };
 
-        // 4. RECOVERY / LOGIN ULANG
+        // 4. RECOVERY (LOGIN)
         window.showRecoverModal = () => { $('recoverModal').style.display = 'flex'; $('recoverInput').focus(); };
-        
         window.doRecovery = () => {
             const inputVal = cleanStr($('recoverInput').value);
             if(!inputVal) return;
 
-            // Cek di data lokal (snapshot terakhir)
+            // Cek di data lokal apakah ada user ini
             const inSlot = localSlots.some(s => s && cleanStr(s.plat) === inputVal);
             const inQueue = localQueue.some(q => cleanStr(q.plat) === inputVal);
 
@@ -343,10 +408,34 @@
                 myPlat = $('recoverInput').value.toUpperCase();
                 $('recoverModal').style.display = 'none';
                 showAlert("SESI DIPULIHKAN! SILAHKAN LANJUTKAN.", "SUKSES");
-                updateUI(); // Refresh tampilan agar tombol muncul
+                updateUI();
             } else {
                 showAlert("DATA TIDAK DITEMUKAN DI ANTRIAN/SLOT AKTIF.", "GAGAL");
             }
+        };
+
+        // 5. QUEUE DETAIL MODAL
+        window.showQueueList = () => {
+            const listDiv = $('fullQueueList');
+            listDiv.innerHTML = '';
+            if(localQueue.length === 0) {
+                listDiv.innerHTML = '<div style="padding:10px; color:#666; text-align:center;">ANTRIAN KOSONG</div>';
+            } else {
+                localQueue.forEach((q, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'q-item';
+                    row.innerHTML = `
+                        <div>
+                            <span style="color:var(--primary); font-family:'Teko'; font-size:20px;">#${q.qNo}</span>
+                            <span style="color:#fff; font-weight:bold; margin-left:10px;">${q.plat}</span>
+                            <div style="font-size:10px; color:#888;">${q.userName}</div>
+                        </div>
+                        <span class="badge-role">${q.role || 'GUEST'}</span>
+                    `;
+                    listDiv.appendChild(row);
+                });
+            }
+            $('queueListModal').style.display = 'flex';
         };
 
         // ADMIN SHORTCUT
